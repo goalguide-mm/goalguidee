@@ -31,6 +31,9 @@
         <button onclick="location.reload()" style="background:#222; color:#D4AF37; border:1px solid #D4AF37; padding:5px 15px; border-radius:4px; cursor:pointer;">REFRESH</button>
     </div>
 
+    <div class="section-title">LIVE MATCHES</div>
+    <div id="live-list" class="grid"></div>
+
     <div class="section-title">RECENT HIGHLIGHTS</div>
     <div id="highlight-list" class="grid"></div>
 
@@ -45,11 +48,9 @@
 
         async function getHighlights() {
             try {
-                // ဒီနေရာမှာ အလုပ်လုပ်မယ့် Token အမှန်ကို ပြန်ထည့်ပေးထားပါတယ်
                 const response = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4MjkzXzE3MDYyNjMxODFfMWRiM2VjYmI4Y2FlN2Q1Y2RjZGEwNDQyYmU4YjZkMjM0YTM0Mjg5MQ==');
                 const data = await response.json();
                 const container = document.getElementById('highlight-list');
-
                 container.innerHTML = ""; 
 
                 data.response.slice(0, 12).forEach((vid, index) => {
@@ -68,6 +69,33 @@
             }
         }
 
+        async function getLiveMatches() {
+            const API_KEY = "d37030c761msh9a0fce3d0a1fab3p1819a3jsnb343019b616b";
+            try {
+                const response = await fetch('https://allsportsapi2.p.rapidapi.com/api/tv/events/live', {
+                    headers: { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'allsportsapi2.p.rapidapi.com' }
+                });
+                const data = await response.json();
+                const container = document.getElementById('live-list');
+                container.innerHTML = "";
+
+                if (data.events && data.events.length > 0) {
+                    data.events.forEach(match => {
+                        container.innerHTML += `
+                            <div class="card">
+                                <div style="font-weight:800; font-size:16px;">${match.homeTeam.name} <span style="color:#D4AF37;">${match.homeScore.current} - ${match.awayScore.current}</span> ${match.awayTeam.name}</div>
+                                <a href="https://www.youtube.com/results?search_query=${match.homeTeam.name}+vs+${match.awayTeam.name}+live" target="_blank" class="btn">WATCH LIVE</a>
+                            </div>`;
+                    });
+                } else {
+                    container.innerHTML = "<p style='text-align:center; width:100%; color:#888;'>ယခုလောလောဆယ် တိုက်ရိုက်ပွဲစဉ်များ မရှိသေးပါ။</p>";
+                }
+            } catch (e) {
+                document.getElementById('live-list').innerHTML = "Live ပွဲစဉ်များ ဆွဲယူ၍မရပါ။";
+            }
+        }
+
+        getLiveMatches();
         getHighlights();
     </script>
 </body>
