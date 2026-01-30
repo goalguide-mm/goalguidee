@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GOAL GUIDE - Live & Highlights</title>
     
-    <link rel="icon" type="image/png" href="IMG_20260123_104505.png?v=3">
-    <link rel="apple-touch-icon" href="IMG_20260123_104505.png?v=3">
-    <link rel="shortcut icon" href="IMG_20260123_104505.png?v=3">
+    <link rel="icon" type="image/png" href="IMG_20260123_104505.png?v=4">
+    <link rel="shortcut icon" href="IMG_20260123_104505.png?v=4">
 
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -19,15 +18,14 @@
         .card { background: linear-gradient(145deg, #1a1d23, #111419); padding: 20px; border-radius: 15px; border: 1px solid #333; transition: 0.4s; text-align: center; }
         .card:hover { border-color: #D4AF37; transform: translateY(-5px); }
         .highlight-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; border: 1px solid #444; }
-        .btn { background: #D4AF37; color: black; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: 800; font-size: 14px; width: 80%; }
-        .refresh-btn { background: #333; color: white; border: 1px solid #D4AF37; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn { background: #D4AF37; color: black; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: 800; font-size: 14px; width: 90%; }
         .loading { color: #888; text-align: center; padding: 20px; grid-column: 1/-1; }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="logo-text">GOAL GUIDE</div>
-        <button class="refresh-btn" onclick="location.reload()">REFRESH</button>
+        <button onclick="location.reload()" style="background:#333; color:white; border:1px solid #D4AF37; padding:8px 15px; border-radius:5px; cursor:pointer;">REFRESH</button>
     </div>
 
     <div class="section-title">Live Matches (တိုက်ရိုက်ပွဲစဉ်များ)</div>
@@ -40,8 +38,9 @@
         <div class="loading">Highlights ဗီဒီယိုများ ရှာဖွေနေသည်...</div>
     </div>
     <script>
-        const API_KEY = "d37030c761msh9a0fce3d0a1fab3p1819a3jsnb343019b616b"; 
+        // ၁။ Live ပွဲစဉ်များအတွက် ခေါ်ယူခြင်း
         async function getLiveMatches() {
+            const API_KEY = "d37030c761msh9a0fce3d0a1fab3p1819a3jsnb343019b616b"; 
             try {
                 const response = await fetch('https://allsportsapi2.p.rapidapi.com/api/tv/events/live', {
                     headers: { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'allsportsapi2.p.rapidapi.com' }
@@ -54,32 +53,40 @@
                         container.innerHTML += `
                             <div class="card">
                                 <div style="font-size: 11px; color: #D4AF37; font-weight: bold;">${match.tournament.uniqueName || 'LIVE'}</div>
-                                <div style="font-weight: 800; margin: 15px 0;">${match.homeTeam.name} <span style="color:#D4AF37">VS</span> ${match.awayTeam.name}</div>
+                                <div style="font-weight: 800; margin: 15px 0;">${match.homeTeam.name} VS ${match.awayTeam.name}</div>
                                 <a href="https://www.youtube.com/results?search_query=${match.homeTeam.name}+vs+${match.awayTeam.name}+live" target="_blank" class="btn">WATCH LIVE</a>
                             </div>`;
                     });
                 } else {
                     container.innerHTML = "<div class='loading'>အခုလောလောဆယ် တိုက်ရိုက်ပွဲစဉ်များ မရှိသေးပါ။</div>";
                 }
-            } catch (e) { container.innerHTML = "<div class='loading'>Live API ချိတ်ဆက်မှု အဆင်မပြေပါ။</div>"; }
+            } catch (e) {
+                document.getElementById('live-list').innerHTML = "<div class='loading'>Live ပွဲစဉ်များကို ခေါ်ယူ၍ မရနိုင်ပါ။</div>";
+            }
         }
 
+        // ၂။ Highlights များအတွက် ခေါ်ယူခြင်း (Token မလိုသော Version)
         async function getHighlights() {
             try {
-                const response = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4MjkzXzE3MDYyNjMxODFfMWRiM2VjYmI4Y2FlN2Q1Y2RjZGEwNDQyYmU4YjZkMjM0YTM0Mjg5MQ==');
+                const response = await fetch('https://www.scorebat.com/video-api/v1/');
                 const data = await response.json();
                 const container = document.getElementById('highlight-list');
                 container.innerHTML = "";
-                data.response.slice(0, 12).forEach(vid => {
+                
+                // ဗီဒီယို ၁၂ ခုကို ပြပေးပါမည်
+                data.slice(0, 12).forEach(vid => {
                     container.innerHTML += `
                         <div class="card highlight-card">
                             <img src="${vid.thumbnail}" alt="thumb">
                             <div style="font-size: 14px; font-weight: 600; min-height: 40px;">${vid.title}</div>
-                            <a href="${vid.matchviewUrl}" target="_blank" class="btn" style="background: #333; color: #D4AF37; border: 1px solid #D4AF37;">WATCH HIGHLIGHT</a>
+                            <a href="${vid.url}" target="_blank" class="btn" style="background:#222; color:#D4AF37; border:1px solid #D4AF37;">WATCH HIGHLIGHT</a>
                         </div>`;
                 });
-            } catch (e) { container.innerHTML = "<div class='loading'>Highlights များ ခေါ်မရနိုင်ပါ။</div>"; }
+            } catch (e) {
+                document.getElementById('highlight-list').innerHTML = "<div class='loading'>Highlights များ ခေါ်ယူ၍ မရနိုင်ပါ။</div>";
+            }
         }
+
         getLiveMatches();
         getHighlights();
     </script>
