@@ -10,7 +10,6 @@
         body { background-color: #0b0e14; color: white; font-family: 'Kanit', sans-serif; margin: 0; padding: 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #D4AF37; padding-bottom: 15px; margin-bottom: 30px; }
         .logo-container { display: flex; align-items: center; gap: 15px; }
-        /* Logo အဝိုင်းပုံစံ သေချာပြင်ထားပါသည် */
         .logo-circle { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
         .logo-text { color: #D4AF37; font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 900; }
         .section-title { color: #D4AF37; font-size: 20px; font-weight: 800; margin: 25px 0 15px; border-left: 5px solid #D4AF37; padding-left: 10px; }
@@ -49,8 +48,11 @@
                 const response = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4MjkzXzE3MDYyNjMxODFfMWRiM2VjYmI4Y2FlN2Q1Y2RjZGEwNDQyYmU4YjZkMjM0YTM0Mjg5MQ==');
                 const data = await response.json();
                 const container = document.getElementById('highlight-list');
-                
-                data.response.slice(0, 12).forEach((vid, index) => {
+
+                // ဒီနေရာမှာ တစ်ကြောင်းခြားပြီး ထည့်ပေးထားပါတယ်
+                container.innerHTML = "";
+
+            data.response.slice(0, 12).forEach((vid, index) => {
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML = `
