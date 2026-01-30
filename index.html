@@ -7,19 +7,19 @@
     <link rel="icon" type="image/png" href="IMG_20260123_104505.png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Kanit:wght@400;800&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0b0e14; color: white; font-family: 'Kanit', sans-serif; margin: 0; padding: 15px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; margin-bottom: 20px; }
-        .logo-container { display: flex; align-items: center; gap: 12px; }
-        .logo-circle { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
-        .logo-text { color: #D4AF37; font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; }
-        .section-title { color: #D4AF37; font-size: 18px; font-weight: 800; margin: 20px 0 10px; border-left: 4px solid #D4AF37; padding-left: 10px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
-        .card { background: #1a1d23; padding: 12px; border-radius: 10px; border: 1px solid #333; text-align: center; }
-        .card img { width: 100%; border-radius: 6px; cursor: pointer; border: 1px solid #444; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; display: none; margin-top: 10px; background: #000; }
+        body { background-color: #0b0e14; color: white; font-family: 'Kanit', sans-serif; margin: 0; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #D4AF37; padding-bottom: 15px; margin-bottom: 30px; }
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        /* Logo အဝိုင်းပုံစံ သေချာပြင်ထားပါသည် */
+        .logo-circle { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
+        .logo-text { color: #D4AF37; font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 900; }
+        .section-title { color: #D4AF37; font-size: 20px; font-weight: 800; margin: 25px 0 15px; border-left: 5px solid #D4AF37; padding-left: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: #1a1d23; padding: 15px; border-radius: 12px; border: 1px solid #333; text-align: center; }
+        .card img { width: 100%; border-radius: 8px; cursor: pointer; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; display: none; margin-top: 10px; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        .btn { background: #D4AF37; color: black; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: 800; width: 100%; margin-top: 10px; display: block; text-decoration: none; }
-        .error-msg { text-align: center; padding: 40px; color: #888; grid-column: 1/-1; }
+        .btn { background: #D4AF37; color: black; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: 800; width: 100%; margin-top: 10px; display: inline-block; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -29,13 +29,11 @@
             <img src="IMG_20260123_104505.png" alt="Logo" class="logo-circle">
             <div class="logo-text">GOAL GUIDE</div>
         </div>
-        <button onclick="location.reload()" style="background:#222; color:#D4AF37; border:1px solid #D4AF37; padding:5px 12px; border-radius:4px; cursor:pointer; font-size:12px;">REFRESH</button>
+        <button onclick="location.reload()" style="background:#222; color:#D4AF37; border:1px solid #D4AF37; padding:5px 15px; border-radius:4px; cursor:pointer;">REFRESH</button>
     </div>
 
     <div class="section-title">RECENT HIGHLIGHTS</div>
-    <div id="highlight-list" class="grid">
-        <p class="error-msg">ဗီဒီယိုများ ဆွဲယူနေဆဲဖြစ်သည်...</p>
-    </div>
+    <div id="highlight-list" class="grid"></div>
 
     <script>
         function playVideo(id, embedCode) {
@@ -48,26 +46,22 @@
 
         async function getHighlights() {
             try {
-                // ပိုသေချာတဲ့ API Link ကို ပြောင်းလဲအသုံးပြုထားပါတယ်
                 const response = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4MjkzXzE3MDYyNjMxODFfMWRiM2VjYmI4Y2FlN2Q1Y2RjZGEwNDQyYmU4YjZkMjM0YTM0Mjg5MQ==');
-                if (!response.ok) throw new Error();
-                
                 const data = await response.json();
                 const container = document.getElementById('highlight-list');
-                container.innerHTML = "";
-                data.response.slice(0, 15).forEach((vid, index) => {
+                data.response.slice(0, 12).forEach((vid, index) => {
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML = `
                         <img id="img-${index}" src="${vid.thumbnail}" onclick='playVideo(${index}, ${JSON.stringify(vid.videos[0].embed)})'>
                         <div id="vid-${index}" class="video-container"></div>
-                        <div style="margin-top:10px; font-weight:600; font-size:14px; color:#ddd;">${vid.title}</div>
+                        <p style="font-size:14px; margin:10px 0;">${vid.title}</p>
                         <button id="btn-${index}" class="btn" onclick='playVideo(${index}, ${JSON.stringify(vid.videos[0].embed)})'>WATCH HIGHLIGHT</button>
                     `;
                     container.appendChild(card);
                 });
             } catch (error) {
-                document.getElementById('highlight-list').innerHTML = "<p class='error-msg'>Highlight များ ဆွဲယူ၍မရပါ။ အင်တာနက်လိုင်း ပြန်စစ်ပေးပါ။</p>";
+                document.getElementById('highlight-list').innerHTML = "Highlight များ ဆွဲယူ၍မရပါ။ အင်တာနက်လိုင်း ပြန်စစ်ပေးပါ။";
             }
         }
 
