@@ -45,11 +45,11 @@
 
         async function getHighlights() {
             try {
+                // ဒီနေရာမှာ အလုပ်လုပ်မယ့် Token အမှန်ကို ပြန်ထည့်ပေးထားပါတယ်
                 const response = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4MjkzXzE3MDYyNjMxODFfMWRiM2VjYmI4Y2FlN2Q1Y2RjZGEwNDQyYmU4YjZkMjM0YTM0Mjg5MQ==');
                 const data = await response.json();
                 const container = document.getElementById('highlight-list');
 
-                // ဟောဒီမှာ တစ်ကြောင်းခြားပြီး ထည့်ပေးရမှာပါ
                 container.innerHTML = ""; 
 
                 data.response.slice(0, 12).forEach((vid, index) => {
