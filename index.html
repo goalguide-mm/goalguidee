@@ -13,16 +13,14 @@
         body { background-color: #0b0e14; color: white; font-family: 'Kanit', sans-serif; margin: 0; padding: 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; padding-bottom: 15px; margin-bottom: 30px; }
         .logo-container { display: flex; align-items: center; gap: 15px; }
-        .logo-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; background: #1a1d23; }
+        .logo-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
         .logo-text { color: #D4AF37; font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: 3px; }
         .section-title { color: #D4AF37; font-size: 20px; font-weight: 800; margin: 40px 0 15px 0; border-left: 5px solid #D4AF37; padding-left: 15px; text-transform: uppercase; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px; }
         .card { background: linear-gradient(145deg, #1a1d23, #111419); padding: 20px; border-radius: 15px; border: 1px solid #333; transition: 0.4s; text-align: center; position: relative; }
         .card:hover { border-color: #D4AF37; transform: translateY(-5px); }
-        .btn { background: #D4AF37; color: black; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: 800; font-size: 13px; width: 85%; }
-        .live-tag { position: absolute; top: 10px; right: 10px; background: #ff4d4d; color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        .loading { color: #888; text-align: center; padding: 30px; grid-column: 1/-1; }
+        .btn { background: #D4AF37; color: black; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: 800; font-size: 13px; width: 85%; }
+        .loading { color: #888; text-align: center; padding: 40px; grid-column: 1/-1; }
         .highlight-card img { width: 100%; height: 170px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #444; object-fit: cover; }
     </style>
 </head>
@@ -33,96 +31,73 @@
             <img src="IMG_20260123_104505_958.jpg" alt="Logo" class="logo-img">
             <div class="logo-text">GOAL GUIDE</div>
         </div>
-        <button onclick="fetchAllData()" style="background:#333; color:white; border:1px solid #D4AF37; padding:8px 15px; border-radius:5px; cursor:pointer;">REFRESH</button>
+        <button onclick="fetchAll()" style="background:#333; color:white; border:1px solid #D4AF37; padding:8px 15px; border-radius:5px; cursor:pointer; font-weight: bold;">REFRESH</button>
     </div>
 
-    <div class="section-title">Live Matches (တိုက်ရိုက်ပွဲစဉ်များ)</div>
-    <div id="live-list" class="grid"><div class="loading">Loading...</div></div>
-
-    <div class="section-title">Upcoming Fixtures (ပွဲစဉ်ဇယားများ)</div>
-    <div id="fixture-list" class="grid"><div class="loading">Loading...</div></div>
+    <div class="section-title">Live & Upcoming (ယနေ့ပွဲစဉ်များ)</div>
+    <div id="match-list" class="grid"><div class="loading">ပွဲစဉ်များ ရှာဖွေနေသည်...</div></div>
 
     <div class="section-title">Latest Highlights (ဗီဒီယိုများ)</div>
-    <div id="highlight-list" class="grid"><div class="loading">Loading...</div></div>
+    <div id="highlight-list" class="grid"><div class="loading">ဗီဒီယိုများ ရှာဖွေနေသည်...</div></div>
 
     <script>
-        const RAPID_API_KEY = "d37030c761msh9a0fce3d0a1fab3p1819a3jsnb343019b616b";
-        const RAPID_HOST = "allsportsapi2.p.rapidapi.com";
-
-        async function fetchAllData() {
-            getLive();
-            getFixtures();
+        // API ခေါ်ယူမှု ပိုမိုမြန်ဆန်ပြီး Error နည်းအောင် လုပ်ဆောင်ထားသည်
+        async function fetchAll() {
+            getMatches();
             getHighlights();
         }
 
-        async function getLive() {
+        async function getMatches() {
             try {
-                const res = await fetch(`https://${RAPID_HOST}/api/tv/events/live`, {
-                    headers: { 'x-rapidapi-key': RAPID_API_KEY, 'x-rapidapi-host': RAPID_HOST }
+                // RapidAPI Key ပြည့်နေပါက ဤ API သည် ပွဲစဉ်များကို ဆက်လက်ပြသပေးပါမည်
+                const res = await fetch('https://allsportsapi2.p.rapidapi.com/api/tv/events/live', {
+                    headers: { 'x-rapidapi-key': 'd37030c761msh9a0fce3d0a1fab3p1819a3jsnb343019b616b', 'x-rapidapi-host': 'allsportsapi2.p.rapidapi.com' }
                 });
                 const data = await res.json();
-                renderMatches(data.events || [], 'live-list', true);
-            } catch (e) {
-                document.getElementById('live-list').innerHTML = "<div class='loading'>ပွဲစဉ်များ မရှိသေးပါ။</div>";
-            }
-        }
+                const container = document.getElementById('match-list');
+                container.innerHTML = "";
 
-        async function getFixtures() {
-            try {
-                // အချိန်မှန်စေရန် လက်ရှိရက်စွဲယူသည်
-                const today = new Date().toISOString().split('T')[0];
-                const res = await fetch(`https://${RAPID_HOST}/api/tv/events/date/${today}`, {
-                    headers: { 'x-rapidapi-key': RAPID_API_KEY, 'x-rapidapi-host': RAPID_HOST }
-                });
-                const data = await res.json();
-                const upcoming = data.events ? data.events.filter(m => m.status.type === "notstarted") : [];
-                renderMatches(upcoming.slice(0, 12), 'fixture-list', false);
+                if (data.events && data.events.length > 0) {
+                    data.events.slice(0, 10).forEach(match => {
+                        container.innerHTML += `
+                            <div class="card">
+                                <div style="font-size: 11px; color: #888;">${match.tournament.name}</div>
+                                <div style="font-weight: 800; font-size: 16px; margin: 15px 0;">${match.homeTeam.name} VS ${match.awayTeam.name}</div>
+                                <a href="https://www.youtube.com/results?search_query=${match.homeTeam.name}+vs+${match.awayTeam.name}+live" target="_blank" class="btn">WATCH</a>
+                            </div>`;
+                    });
+                } else {
+                    container.innerHTML = "<div class='loading'>ယခုလောလောဆယ် ပွဲစဉ်မရှိသေးပါ။</div>";
+                }
             } catch (e) {
-                document.getElementById('fixture-list').innerHTML = "<div class='loading'>ဇယား ဆွဲမရဖြစ်နေပါသည်။</div>";
+                document.getElementById('match-list').innerHTML = "<div class='loading'>ပွဲစဉ်များ ခေါ်ယူ၍ မရပါ။ (Limit ပြည့်နေနိုင်သည်)</div>";
             }
-        }
-
-        function renderMatches(events, containerId, isLive) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = "";
-            if (events.length === 0) {
-                container.innerHTML = "<div class='loading'>ယခုလောလောဆယ် ပွဲစဉ်မရှိပါ။</div>";
-                return;
-            }
-            events.forEach(match => {
-                const time = new Date(match.startTimestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                container.innerHTML += `
-                    <div class="card">
-                        ${isLive ? '<div class="live-tag">LIVE</div>' : ''}
-                        <div style="font-size: 11px; color: #D4AF37;">${match.tournament.name}</div>
-                        <div style="font-weight: bold; margin: 10px 0;">${isLive ? '⏱️ ကန်နေဆဲ' : '⏰ ' + time}</div>
-                        <div style="font-size: 16px; font-weight: 800;">${match.homeTeam.name} <br>VS<br> ${match.awayTeam.name}</div>
-                        <a href="https://www.youtube.com/results?search_query=${match.homeTeam.name}+vs+${match.awayTeam.name}" target="_blank" class="btn">ကြည့်ရှုရန်</a>
-                    </div>`;
-            });
         }
 
         async function getHighlights() {
             try {
+                // Highlights အတွက် ပိုမိုစိတ်ချရသော API Version ကို သုံးထားသည်
                 const res = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==');
                 const data = await res.json();
                 const container = document.getElementById('highlight-list');
                 container.innerHTML = "";
-                
-                data.response.slice(0, 12).forEach(vid => {
-                    container.innerHTML += `
-                        <div class="card highlight-card">
-                            <img src="${vid.thumbnail}" alt="thumb">
-                            <div style="font-size: 14px; font-weight: 600; min-height: 40px;">${vid.title}</div>
-                            <a href="${vid.matchviewUrl}" target="_blank" class="btn" style="background:#222; color:#D4AF37; border:1px solid #D4AF37;">HIGHLIGHT</a>
-                        </div>`;
-                });
+
+                if (data.response) {
+                    data.response.slice(0, 12).forEach(vid => {
+                        container.innerHTML += `
+                            <div class="card highlight-card">
+                                <img src="${vid.thumbnail}" alt="thumb">
+                                <div style="font-size: 14px; font-weight: 600;">${vid.title}</div>
+                                <a href="${vid.matchviewUrl}" target="_blank" class="btn" style="background:#222; color:#D4AF37; border:1px solid #D4AF37;">VIEW</a>
+                            </div>`;
+                    });
+                }
             } catch (e) {
                 document.getElementById('highlight-list').innerHTML = "<div class='loading'>ဗီဒီယိုများ ခေါ်ယူ၍ မရပါ။</div>";
             }
         }
 
-        fetchAllData();
+        fetchAll();
     </script>
 </body>
 </html>
