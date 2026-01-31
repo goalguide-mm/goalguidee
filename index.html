@@ -3,27 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOAL GUIDE - Fixed Version</title>
+    <title>GOAL GUIDE - Pro Black</title>
     <style>
         *{box-sizing:border-box}
-        body{ margin:0; font-family:'Segoe UI', sans-serif; background:#0b0f14; color:#fff; }
-        header{ padding:15px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #f5c400; background: #0d121a; }
-        header h1{margin:0; color:#f5c400; font-size: 24px;}
-        nav button{ background:none; border:none; color:#fff; font-weight:600; cursor:pointer; margin-left:15px; opacity:.6; }
-        nav button.active{ opacity:1; color:#f5c400; border-bottom: 2px solid #f5c400; }
+        body{ margin:0; font-family:'Segoe UI', sans-serif; background:#0b0f14; color:#fff; overflow-x: hidden; }
         
-        section{ display:none; padding:20px; min-height: 80vh; }
+        header{ padding:15px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #f5c400; background: #0d121a; position: sticky; top: 0; z-index: 1000; }
+        header h1{margin:0; color:#f5c400; font-size: 22px; text-transform: uppercase;}
+        
+        nav button{ background:none; border:none; color:#fff; font-weight:600; cursor:pointer; margin-left:15px; opacity:.5; transition: 0.3s; }
+        nav button.active{ opacity:1; color:#f5c400; border-bottom: 2px solid #f5c400; padding-bottom: 5px; }
+        
+        section{ display:none; padding:10px; }
         section.active{ display:block; }
-        
-        /* Card & UI Design */
-        .status-bar { background: #1a222f; padding: 10px 20px; font-size: 13px; color: #f5c400; border-bottom: 1px solid #2d3748; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
-        .card { background: #151c26; border-radius: 12px; border: 1px solid #2d3748; overflow: hidden; }
-        .card-header { padding: 10px; background: #1d2736; font-size: 12px; font-weight: bold; color: #f5c400; border-bottom: 1px solid #2d3748; }
-        
-        /* Error ကင်းတဲ့ Widget Frame */
-        iframe { width: 100%; border: none; background: transparent; }
-        .loading-msg { text-align: center; padding: 50px; color: #888; }
+
+        /* Widget Container ကို အနက်ရောင်ပြောင်းပြီး Logo ကို ဖုံးအုပ်ခြင်း */
+        .widget-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #111823;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #2d3748;
+        }
+
+        /* ScoreBat Logo ကို ဖုံးကွယ်ရန် Overlay */
+        .logo-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 45px; /* Logo နေရာကို အုပ်လိုက်တာပါ */
+            background: #111823;
+            z-index: 10;
+        }
+
+        iframe {
+            width: 100%;
+            border: none;
+            margin-top: -45px; /* Logo ကို အပေါ်ပို့ပြီး ဖျောက်လိုက်တာပါ */
+            filter: grayscale(0.2) contrast(1.1); /* အရောင်ကို ပိုရင့်စေရန် */
+        }
+
+        .status-bar { text-align: center; padding: 10px; font-size: 12px; color: #888; }
     </style>
 </head>
 <body>
@@ -36,25 +60,21 @@
     </nav>
 </header>
 
-<div class="status-bar">● Real-time Football Updates (No API Key Required)</div>
+<div class="status-bar">Real-time Football Data Hub</div>
 
 <section id="live" class="active">
-    <div class="grid">
-        <div class="card" style="grid-column: 1 / -1;">
-            <div class="card-header">LIVE SCORES & MATCH SCHEDULE</div>
-            <iframe src="https://www.scorebat.com/embed/livescore/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==" 
-                    height="600" allowfullscreen allow="autoplay; fullscreen" class="_scorebatEmbeddedPlayer_"></iframe>
-        </div>
+    <div class="widget-wrapper">
+        <div class="logo-mask"></div>
+        <iframe src="https://www.scorebat.com/embed/livescore/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==&dark=1" 
+                height="700" allowfullscreen allow="autoplay; fullscreen" class="_scorebatEmbeddedPlayer_"></iframe>
     </div>
 </section>
 
 <section id="highlights">
-    <div class="grid">
-        <div class="card" style="grid-column: 1 / -1;">
-            <div class="card-header">LATEST MATCH HIGHLIGHTS</div>
-            <iframe src="https://www.scorebat.com/embed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==" 
-                    height="600" allowfullscreen allow="autoplay; fullscreen" class="_scorebatEmbeddedPlayer_"></iframe>
-        </div>
+    <div class="widget-wrapper">
+        <div class="logo-mask"></div>
+        <iframe src="https://www.scorebat.com/embed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==&dark=1" 
+                height="700" allowfullscreen allow="autoplay; fullscreen" class="_scorebatEmbeddedPlayer_"></iframe>
     </div>
 </section>
 
@@ -66,16 +86,15 @@
         btn.classList.add('active');
     }
 
-    // Auto-resize script
-    window.addEventListener('message', function(e) {
-        if (typeof e.data !== 'string') return;
-        if (e.data.indexOf('scorebat-stats-update') !== -1) {
-            console.log('Stats Updated');
-        }
-    });
+    // ScoreBat Script
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://www.scorebat.com/embed/embed.js';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'scorebat-jssdk'));
 </script>
-
-<script src="https://www.scorebat.com/embed/embed.js"></script>
 
 </body>
 </html>
