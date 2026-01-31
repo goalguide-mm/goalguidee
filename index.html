@@ -12,12 +12,11 @@
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family:'Poppins', sans-serif;
+  font-family:'Poppins',sans-serif;
   background:#0b0f14;
   color:#fff;
 }
 
-/* ================= HEADER ================= */
 header{
   padding:14px 22px;
   display:flex;
@@ -25,168 +24,85 @@ header{
   align-items:center;
   border-bottom:3px solid #f5c400;
   background:#0d121a;
-  box-shadow:0 4px 10px rgba(0,0,0,.5);
 }
 
 .logo-area{
   display:flex;
   align-items:center;
-  gap:15px;
+  gap:14px;
 }
-
 .logo-area img{
-  width:50px;
-  height:50px;
-  object-fit:cover;
+  width:48px;height:48px;
   border-radius:50%;
   border:2px solid #f5c400;
   padding:2px;
-  background:#000;
 }
-
 header h1{
   margin:0;
-  color:#f5c400;
   font-family:'Montserrat',sans-serif;
+  color:#f5c400;
   font-size:26px;
-  font-weight:800;
   letter-spacing:1px;
 }
 
-/* ================= NAV ================= */
 nav button{
   background:none;
   border:none;
-  color:#fff;
+  color:#aaa;
   font-weight:600;
-  cursor:pointer;
-  margin-left:12px;
-  opacity:.6;
 }
-
 nav button.active{
-  opacity:1;
   color:#f5c400;
   border-bottom:2px solid #f5c400;
   padding-bottom:4px;
 }
 
-/* ================= CONTROLS ================= */
-.controls{
-  padding:14px 22px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  background:#111823;
-}
-
-select,button{
-  background:#1a222f;
-  color:#f5c400;
-  border:1px solid #f5c400;
-  padding:8px 15px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-/* ================= SECTIONS ================= */
-section{display:none;padding:22px}
-section.active{display:block}
+section{padding:25px}
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
   gap:18px;
 }
 
-/* ================= CARD ================= */
 .card{
   background:linear-gradient(145deg,#151c26,#0d121a);
-  padding:18px;
-  border-radius:15px;
+  padding:16px;
+  border-radius:14px;
   border:1px solid #2d3748;
-  display:flex;
-  flex-direction:column;
-  transition:.3s;
-}
-
-.card:hover{
-  transform:translateY(-5px);
-  border-color:#f5c400;
 }
 
 .league{
   font-size:11px;
   color:#f5c400;
   font-weight:bold;
-  margin-bottom:12px;
+  margin-bottom:6px;
 }
 
-/* ===== MATCH ROW (LOGO + NAME) ===== */
-.match{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  min-height:60px;
-}
-
-.team{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:14px;
-  font-weight:600;
-  width:40%;
-}
-
-.team.right{
-  justify-content:flex-end;
-  text-align:right;
-}
-
-.team img{
-  width:28px;
-  height:28px;
-  object-fit:contain;
-}
-
-.vs{
-  color:#f5c400;
-  font-weight:900;
-  font-size:13px;
-}
-
-/* ===== TIME ===== */
-.time{
-  margin-top:auto;
-  font-size:12px;
-  color:#f5c400;
-  background:rgba(245,196,0,.1);
-  padding:8px;
-  border-radius:8px;
-  text-align:center;
+.badge{
+  display:inline-block;
+  font-size:10px;
+  padding:3px 8px;
+  border-radius:12px;
+  margin-bottom:6px;
   font-weight:bold;
 }
+.today{background:#f5c400;color:#000}
+.yesterday{background:#444;color:#f5c400}
 
-/* ===== VIDEO ===== */
 .video{
   position:relative;
   padding-bottom:56.25%;
   height:0;
-  margin-top:12px;
-  border-radius:10px;
   overflow:hidden;
-  border:1px solid #333;
+  border-radius:10px;
+  background:#000;
 }
-
 .video iframe{
   position:absolute;
+  top:0;left:0;
   width:100%;
   height:100%;
-  left:0;
-  top:0;
   border:0;
 }
 
@@ -194,7 +110,6 @@ section.active{display:block}
   text-align:center;
   opacity:.6;
   padding:40px 0;
-  grid-column:1/-1;
 }
 
 footer{
@@ -214,118 +129,84 @@ footer{
     <h1>GOAL GUIDE</h1>
   </div>
   <nav>
-    <button class="active" onclick="showPage('live',this)">LIVE</button>
-    <button onclick="showPage('fixtures',this)">FIXTURES</button>
-    <button onclick="showPage('highlights',this)">HIGHLIGHTS</button>
+    <button class="active">HIGHLIGHTS</button>
   </nav>
 </header>
 
-<div class="controls">
-  <select id="league" onchange="refreshCurrent()">
-    <option value="4328">Premier League</option>
-    <option value="4335">La Liga</option>
-    <option value="4331">Bundesliga</option>
-    <option value="4332">Serie A</option>
-    <option value="4334">Ligue 1</option>
-  </select>
-  <button onclick="refreshCurrent()">REFRESH</button>
-</div>
-
-<section id="live" class="active"><div id="liveBox" class="grid"></div></section>
-<section id="fixtures"><div id="fixtureBox" class="grid"></div></section>
-<section id="highlights"><div id="highlightBox" class="grid"></div></section>
+<section>
+  <div id="highlightBox" class="grid"></div>
+</section>
 
 <footer>GOAL GUIDE © 2026 · MYANMAR TIME</footer>
 
 <script>
-const DB="https://www.thesportsdb.com/api/v1/json/3";
-const SCOREBAT="https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
-
-function showPage(id,btn){
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  btn.classList.add("active");
-  if(id==="highlights")loadHighlights();
-  if(id==="fixtures")loadFixtures();
-  if(id==="live")loadLive();
-}
-
-function refreshCurrent(){
-  const a=document.querySelector("section.active").id;
-  if(a==="fixtures")loadFixtures();
-  else if(a==="live")loadLive();
-  else loadHighlights();
-}
-
-function mmt(d,t){
-  if(!d||!t)return"TBA";
-  const x=new Date(d+"T"+t+"Z");
-  x.setMinutes(x.getMinutes()+390);
-  return x.toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})+" MMT";
-}
-
-async function loadFixtures(){
-  const league=document.getElementById("league").value;
-  const box=document.getElementById("fixtureBox");
-  box.innerHTML="<div class='center'>Loading...</div>";
-  const r=await fetch(`${DB}/eventsnextleague.php?id=${league}`);
-  const j=await r.json();
-  box.innerHTML=j.events?j.events.map(e=>`
-  <div class="card">
-    <div class="league">${e.strLeague}</div>
-    <div class="match">
-      <div class="team">
-        <img src="${e.strHomeTeamBadge}">
-        ${e.strHomeTeam}
-      </div>
-      <div class="vs">VS</div>
-      <div class="team right">
-        ${e.strAwayTeam}
-        <img src="${e.strAwayTeamBadge}">
-      </div>
-    </div>
-    <div class="time">${mmt(e.dateEvent,e.strTime)}</div>
-  </div>`).join(""):"<div class='center'>No data</div>";
-}
-
-async function loadLive(){
-  const box=document.getElementById("liveBox");
-  box.innerHTML="<div class='center'>Loading...</div>";
-  const r=await fetch(`${DB}/eventsday.php?s=Soccer`);
-  const j=await r.json();
-  box.innerHTML=j.events?j.events.map(e=>`
-  <div class="card">
-    <div class="league">${e.strLeague}</div>
-    <div class="match">
-      <div class="team">
-        <img src="${e.strHomeTeamBadge}">
-        ${e.strHomeTeam}
-      </div>
-      <div class="vs">VS</div>
-      <div class="team right">
-        ${e.strAwayTeam}
-        <img src="${e.strAwayTeamBadge}">
-      </div>
-    </div>
-    <div class="time">${mmt(e.dateEvent,e.strTime)}</div>
-  </div>`).join(""):"<div class='center'>No matches</div>";
-}
+const SCOREBAT =
+"https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
 
 async function loadHighlights(){
-  const box=document.getElementById("highlightBox");
-  box.innerHTML="<div class='center'>Loading...</div>";
-  const r=await fetch(SCOREBAT);
-  const j=await r.json();
-  box.innerHTML=j.response.map(v=>`
-  <div class="card">
-    <div class="league">${v.competition}</div>
-    <div style="font-weight:bold;font-size:13px">${v.title}</div>
-    <div class="video">${v.videos[0].embed}</div>
-  </div>`).join("");
+  const box = document.getElementById("highlightBox");
+  box.innerHTML = "<div class='center'>Loading highlights...</div>";
+
+  try{
+    const r = await fetch(SCOREBAT);
+    const j = await r.json();
+
+    /* ===== MMT TIME ===== */
+    const nowMMT = new Date(Date.now() + 6.5*60*60*1000);
+    const today = nowMMT.toISOString().split("T")[0];
+    const y = new Date(nowMMT);
+    y.setDate(y.getDate() - 1);
+    const yesterday = y.toISOString().split("T")[0];
+
+    const data = j.response.filter(v => {
+      const d = v.date.substring(0,10);
+      const title = v.title.toLowerCase();
+
+      /* FULL MATCH ONLY */
+      const isFullMatch =
+        title.includes("full") ||
+        title.includes("extended");
+
+      return isFullMatch && (d === today || d === yesterday);
+    });
+
+    if(!data.length){
+      box.innerHTML="<div class='center'>No full match highlights.</div>";
+      return;
+    }
+
+    box.innerHTML = data.map(v=>{
+      const d = v.date.substring(0,10);
+      const label = d === today
+        ? "<span class='badge today'>TODAY</span>"
+        : "<span class='badge yesterday'>YESTERDAY</span>";
+
+      /* Mobile autoplay fix */
+      const embed = v.videos[0].embed
+        .replace("autoplay=1","autoplay=0")
+        .replace("<iframe","<iframe loading='lazy'");
+
+      return `
+      <div class="card">
+        ${label}
+        <div class="league">${v.competition}</div>
+        <div style="margin-bottom:10px;font-weight:bold;font-size:13px">
+          ${v.title}
+        </div>
+        <div class="video">
+          ${embed}
+        </div>
+      </div>`;
+    }).join("");
+
+  }catch(e){
+    box.innerHTML="<div class='center'>Highlight service unavailable.</div>";
+  }
 }
 
-loadLive();
+/* AUTO REFRESH – 10 MIN */
+loadHighlights();
+setInterval(loadHighlights, 600000);
 </script>
 
 </body>
