@@ -1,122 +1,149 @@
 <!DOCTYPE html>
 <html lang="my">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOAL GUIDE - Sports Hub</title>
-    
-    <link rel="icon" type="image/jpeg" href="IMG_20260123_104505_958.jpg">
-    <link rel="shortcut icon" href="IMG_20260123_104505_958.jpg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOAL GUIDE</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        body { background-color: #0b0e14; color: white; font-family: 'Kanit', sans-serif; margin: 0; padding: 15px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; padding-bottom: 15px; margin-bottom: 25px; }
-        .logo-container { display: flex; align-items: center; gap: 15px; }
-        .logo-img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
-        .logo-text { color: #D4AF37; font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: 2px; }
-        
-        .section-title { color: #D4AF37; font-size: 18px; font-weight: 800; margin: 30px 0 15px 0; border-left: 5px solid #D4AF37; padding-left: 12px; text-transform: uppercase; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        
-        /* Match Card Style */
-        .match-card { background: #1a1d23; padding: 20px; border-radius: 15px; border: 1px solid #333; text-align: center; border-top: 3px solid #D4AF37; }
-        .league-name { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 10px; }
-        .team-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; font-weight: 800; font-size: 16px; }
-        .vs-tag { color: #D4AF37; font-size: 12px; }
-        
-        /* Highlight Card Style */
-        .card { background: #1a1d23; padding: 15px; border-radius: 15px; border: 1px solid #333; text-align: center; transition: 0.3s; }
-        .hl-img { width: 100%; height: 160px; border-radius: 10px; object-fit: cover; border: 1px solid #444; }
-        
-        .btn { background: #D4AF37; color: black; padding: 10px; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: bold; width: 100%; box-sizing: border-box; font-size: 14px; }
-        .loading { color: #888; text-align: center; padding: 30px; grid-column: 1/-1; width: 100%; }
-        .time-tag { font-size: 12px; color: #D4AF37; background: #222; padding: 2px 8px; border-radius: 4px; }
-    </style>
+<link rel="icon" href="IMG_20260123_104505_958.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+body{margin:0;padding:15px;background:#0b0e14;color:#fff;font-family:'Kanit',sans-serif}
+.header{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #D4AF37;padding-bottom:15px}
+.logo{display:flex;align-items:center;gap:15px}
+.logo img{width:55px;height:55px;border-radius:50%;border:2px solid #D4AF37}
+.logo span{font-family:'Orbitron';font-size:26px;font-weight:900;color:#D4AF37}
+button,select{background:#111;border:1px solid #D4AF37;color:#D4AF37;padding:8px 12px;border-radius:6px}
+.section{margin-top:30px}
+.title{color:#D4AF37;font-weight:800;border-left:5px solid #D4AF37;padding-left:12px;margin-bottom:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.card{background:#1a1d23;border-radius:15px;padding:20px;border:1px solid #333;text-align:center}
+.card.live{border-top:3px solid red}
+.league{font-size:11px;color:#aaa;text-transform:uppercase}
+.teams{display:flex;justify-content:space-between;font-weight:800;margin:10px 0}
+.vs{color:#D4AF37;font-size:12px}
+.time{font-size:12px;color:#D4AF37;background:#222;padding:4px 8px;border-radius:5px}
+.loading{text-align:center;color:#888;grid-column:1/-1}
+img{width:100%;height:160px;object-fit:cover;border-radius:10px;border:1px solid #444}
+a{display:block;margin-top:10px;padding:10px;border-radius:8px;border:1px solid #D4AF37;color:#D4AF37;text-decoration:none}
+.live-tag{color:red;font-weight:800;font-size:12px}
+</style>
 </head>
+
 <body>
 
-    <div class="header">
-        <div class="logo-container">
-            <img src="IMG_20260123_104505_958.jpg" alt="Logo" class="logo-img">
-            <div class="logo-text">GOAL GUIDE</div>
+<div class="header">
+  <div class="logo">
+    <img src="IMG_20260123_104505_958.jpg">
+    <span>GOAL GUIDE</span>
+  </div>
+  <div>
+    <select id="league" onchange="loadAll()">
+      <option value="4328">Premier League</option>
+      <option value="4335">La Liga</option>
+      <option value="4332">Serie A</option>
+    </select>
+    <button onclick="loadAll()">REFRESH</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="title">Live Matches</div>
+  <div id="live" class="grid">
+    <div class="loading">Live matches ရှာဖွေနေသည်...</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="title">Upcoming Fixtures</div>
+  <div id="fixtures" class="grid">
+    <div class="loading">Fixtures ဆွဲယူနေသည်...</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="title">Match Highlights</div>
+  <div id="highlights" class="grid">
+    <div class="loading">Highlights ဆွဲယူနေသည်...</div>
+  </div>
+</div>
+
+<script>
+function leagueId(){return document.getElementById("league").value}
+
+// LIVE MATCHES
+async function loadLive(){
+  const box=document.getElementById("live")
+  try{
+    const r=await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnowleague.php?id=${leagueId()}`)
+    const d=await r.json()
+    box.innerHTML=""
+    if(!d.events){box.innerHTML="<div class='loading'>Live မရှိပါ</div>";return}
+    d.events.forEach(m=>{
+      box.innerHTML+=`
+      <div class="card live">
+        <div class="league">${m.strLeague}</div>
+        <div class="teams">
+          <span>${m.strHomeTeam}</span>
+          <span class="vs">VS</span>
+          <span>${m.strAwayTeam}</span>
         </div>
-        <button onclick="location.reload()" style="background:transparent; color:#D4AF37; border:1px solid #D4AF37; padding:8px 15px; border-radius:5px; cursor:pointer;">REFRESH</button>
-    </div>
+        <div class="live-tag">● LIVE</div>
+      </div>`
+    })
+  }catch{box.innerHTML="<div class='loading'>Live error</div>"}
+}
 
-    <div class="section-title">Upcoming Fixtures (ပွဲစဉ်ဇယားများ)</div>
-    <div id="fixture-list" class="grid">
-        <div class="loading">ပွဲစဉ်များ ရှာဖွေနေသည်...</div>
-    </div>
+// FIXTURES
+async function loadFixtures(){
+  const box=document.getElementById("fixtures")
+  try{
+    const r=await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${leagueId()}`)
+    const d=await r.json()
+    box.innerHTML=""
+    d.events.slice(0,6).forEach(m=>{
+      box.innerHTML+=`
+      <div class="card">
+        <div class="league">${m.strLeague}</div>
+        <div class="teams">
+          <span>${m.strHomeTeam}</span>
+          <span class="vs">VS</span>
+          <span>${m.strAwayTeam}</span>
+        </div>
+        <div class="time">${m.dateEvent} • ${m.strTime}</div>
+      </div>`
+    })
+  }catch{box.innerHTML="<div class='loading'>Fixtures error</div>"}
+}
 
-    <div class="section-title">Latest Match Highlights (ပွဲပြီးဗီဒီယိုများ)</div>
-    <div id="highlight-list" class="grid">
-        <div class="loading">ဗီဒီယိုများ ခေါ်ယူနေသည်...</div>
-    </div>
+// HIGHLIGHTS
+async function loadHighlights(){
+  const box=document.getElementById("highlights")
+  try{
+    const r=await fetch("https://api.allorigins.win/raw?url=https://www.scorebat.com/video-api/v3/feed/")
+    const d=await r.json()
+    box.innerHTML=""
+    d.response.slice(0,6).forEach(v=>{
+      box.innerHTML+=`
+      <div class="card">
+        <img src="${v.thumbnail}">
+        <div>${v.title}</div>
+        <a href="${v.matchviewUrl}" target="_blank">WATCH</a>
+      </div>`
+    })
+  }catch{box.innerHTML="<div class='loading'>Highlights error</div>"}
+}
 
-    <script>
-        // ပွဲစဉ်ဇယားများကို Card ပုံစံဖြင့် ဆွဲယူခြင်း
-        async function loadFixtures() {
-            const container = document.getElementById('fixture-list');
-            try {
-                // Public Sports API
-                const res = await fetch('https://www.thesportsdb.com/api/v1/json/3/latestsoccer.php');
-                const data = await res.json();
-                container.innerHTML = "";
+function loadAll(){
+  loadLive()
+  loadFixtures()
+  loadHighlights()
+}
 
-                if (data.events && data.events.length > 0) {
-                    data.events.slice(0, 9).forEach(match => {
-                        container.innerHTML += `
-                            <div class="match-card">
-                                <div class="league-name">${match.strLeague}</div>
-                                <div class="team-row">
-                                    <span style="flex:1;">${match.strHomeTeam}</span>
-                                    <span class="vs-tag">VS</span>
-                                    <span style="flex:1;">${match.strAwayTeam}</span>
-                                </div>
-                                <div style="margin-top:15px;">
-                                    <span class="time-tag">Match Details</span>
-                                </div>
-                                <a href="https://www.google.com/search?q=${match.strEvent}" target="_blank" class="btn">VIEW STATS</a>
-                            </div>`;
-                    });
-                } else {
-                    container.innerHTML = "<div class='loading'>ယခုလောလောဆယ် ပွဲစဉ်များမရှိသေးပါ။</div>";
-                }
-            } catch (e) {
-                container.innerHTML = "<div class='loading'>ပွဲစဉ်များ ဆွဲယူ၍မရပါ။</div>";
-            }
-        }
+loadAll()
+setInterval(loadLive,60000)
+</script>
 
-        // Highlights ကို API ကနေ Card ပုံစံဖြင့် ဆွဲယူခြင်း
-        async function loadHighlights() {
-            const container = document.getElementById('highlight-list');
-            try {
-                const res = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==');
-                const data = await res.json();
-                container.innerHTML = "";
-
-                if (data.response && data.response.length > 0) {
-                    data.response.slice(0, 12).forEach(vid => {
-                        container.innerHTML += `
-                            <div class="card">
-                                <img src="${vid.thumbnail}" class="hl-img" alt="thumb">
-                                <div style="font-size: 14px; font-weight: 600; margin: 12px 0; height: 40px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                                    ${vid.title}
-                                </div>
-                                <a href="${vid.matchviewUrl}" target="_blank" class="btn" style="background:#222; color:#D4AF37; border:1px solid #D4AF37;">WATCH VIDEO</a>
-                            </div>`;
-                    });
-                }
-            } catch (e) {
-                container.innerHTML = "<div class='loading'>ဗီဒီယိုများ ဆွဲယူ၍မရပါ။</div>";
-            }
-        }
-
-        // Run
-        loadFixtures();
-        loadHighlights();
-    </script>
 </body>
 </html>
