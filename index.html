@@ -18,17 +18,21 @@
         
         .section-title { color: #D4AF37; font-size: 18px; font-weight: 800; margin: 30px 0 15px 0; border-left: 5px solid #D4AF37; padding-left: 12px; text-transform: uppercase; }
         
-        /* Live Score & Fixtures Widget Container */
-        .widget-container { width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid #333; background: #1a1d23; height: 500px; margin-bottom: 30px; }
-        iframe { border: none; width: 100%; height: 100%; }
-
-        /* Highlights Card Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        
+        /* Match Card Style */
+        .match-card { background: #1a1d23; padding: 20px; border-radius: 15px; border: 1px solid #333; text-align: center; border-top: 3px solid #D4AF37; }
+        .league-name { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 10px; }
+        .team-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; font-weight: 800; font-size: 16px; }
+        .vs-tag { color: #D4AF37; font-size: 12px; }
+        
+        /* Highlight Card Style */
         .card { background: #1a1d23; padding: 15px; border-radius: 15px; border: 1px solid #333; text-align: center; transition: 0.3s; }
-        .card:hover { border-color: #D4AF37; transform: translateY(-5px); }
         .hl-img { width: 100%; height: 160px; border-radius: 10px; object-fit: cover; border: 1px solid #444; }
-        .btn { background: #D4AF37; color: black; padding: 10px; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: bold; width: 100%; box-sizing: border-box; }
-        .loading { color: #888; text-align: center; padding: 30px; grid-column: 1/-1; }
+        
+        .btn { background: #D4AF37; color: black; padding: 10px; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: bold; width: 100%; box-sizing: border-box; font-size: 14px; }
+        .loading { color: #888; text-align: center; padding: 30px; grid-column: 1/-1; width: 100%; }
+        .time-tag { font-size: 12px; color: #D4AF37; background: #222; padding: 2px 8px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -41,9 +45,9 @@
         <button onclick="location.reload()" style="background:transparent; color:#D4AF37; border:1px solid #D4AF37; padding:8px 15px; border-radius:5px; cursor:pointer;">REFRESH</button>
     </div>
 
-    <div class="section-title">Live Scores & Fixtures (တိုက်ရိုက်ရလဒ်နှင့် ပွဲစဉ်ဇယား)</div>
-    <div class="widget-container">
-        <iframe src="https://www.scorebat.com/embed/livescore/" allowfullscreen allow="autoplay; fullscreen" class="_scorebatEmbeddedPlayer_"></iframe>
+    <div class="section-title">Upcoming Fixtures (ပွဲစဉ်ဇယားများ)</div>
+    <div id="fixture-list" class="grid">
+        <div class="loading">ပွဲစဉ်များ ရှာဖွေနေသည်...</div>
     </div>
 
     <div class="section-title">Latest Match Highlights (ပွဲပြီးဗီဒီယိုများ)</div>
@@ -52,13 +56,45 @@
     </div>
 
     <script>
-        // Highlights Data ကို API ကနေ သီးသန့်ဆွဲယူပြီး Card ထုတ်ပေးမည်
-        async function loadHighlights() {
+        // ပွဲစဉ်ဇယားများကို Card ပုံစံဖြင့် ဆွဲယူခြင်း
+        async function loadFixtures() {
+            const container = document.getElementById('fixture-list');
             try {
-                // ScoreBat API - Video Feed
-                const response = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==');
-                const data = await response.json();
-                const container = document.getElementById('highlight-list');
+                // Public Sports API
+                const res = await fetch('https://www.thesportsdb.com/api/v1/json/3/latestsoccer.php');
+                const data = await res.json();
+                container.innerHTML = "";
+
+                if (data.events && data.events.length > 0) {
+                    data.events.slice(0, 9).forEach(match => {
+                        container.innerHTML += `
+                            <div class="match-card">
+                                <div class="league-name">${match.strLeague}</div>
+                                <div class="team-row">
+                                    <span style="flex:1;">${match.strHomeTeam}</span>
+                                    <span class="vs-tag">VS</span>
+                                    <span style="flex:1;">${match.strAwayTeam}</span>
+                                </div>
+                                <div style="margin-top:15px;">
+                                    <span class="time-tag">Match Details</span>
+                                </div>
+                                <a href="https://www.google.com/search?q=${match.strEvent}" target="_blank" class="btn">VIEW STATS</a>
+                            </div>`;
+                    });
+                } else {
+                    container.innerHTML = "<div class='loading'>ယခုလောလောဆယ် ပွဲစဉ်များမရှိသေးပါ။</div>";
+                }
+            } catch (e) {
+                container.innerHTML = "<div class='loading'>ပွဲစဉ်များ ဆွဲယူ၍မရပါ။</div>";
+            }
+        }
+
+        // Highlights ကို API ကနေ Card ပုံစံဖြင့် ဆွဲယူခြင်း
+        async function loadHighlights() {
+            const container = document.getElementById('highlight-list');
+            try {
+                const res = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==');
+                const data = await res.json();
                 container.innerHTML = "";
 
                 if (data.response && data.response.length > 0) {
@@ -66,21 +102,20 @@
                         container.innerHTML += `
                             <div class="card">
                                 <img src="${vid.thumbnail}" class="hl-img" alt="thumb">
-                                <div style="font-size: 14px; font-weight: 600; margin: 10px 0; height: 40px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                <div style="font-size: 14px; font-weight: 600; margin: 12px 0; height: 40px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
                                     ${vid.title}
                                 </div>
-                                <a href="${vid.matchviewUrl}" target="_blank" class="btn">WATCH HIGHLIGHT</a>
+                                <a href="${vid.matchviewUrl}" target="_blank" class="btn" style="background:#222; color:#D4AF37; border:1px solid #D4AF37;">WATCH VIDEO</a>
                             </div>`;
                     });
-                } else {
-                    container.innerHTML = "<div class='loading'>လက်ရှိတွင် Highlights များ မရှိသေးပါ။</div>";
                 }
             } catch (e) {
-                document.getElementById('highlight-list').innerHTML = "<div class='loading'>ဗီဒီယိုများ ခေါ်ယူ၍ မရပါ။</div>";
+                container.innerHTML = "<div class='loading'>ဗီဒီယိုများ ဆွဲယူ၍မရပါ။</div>";
             }
         }
 
-        // စတင်ချိန်တွင် Load လုပ်မည်
+        // Run
+        loadFixtures();
         loadHighlights();
     </script>
 </body>
