@@ -3,35 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOAL GUIDE - Fixed Design</title>
+    <title>GOAL GUIDE - Fixed Version</title>
     <style>
-        /* သင့် Original Design အတိုင်း အနက်ရောင် Theme */
-        *{box-sizing:border-box}
-        body{ margin:0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#0b0f14; color:#fff; }
-        header{ padding:15px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #f5c400; background: #0d121a; }
-        header h1{margin:0; color:#f5c400; font-size: 24px; font-weight: 800;}
-        nav button{ background:none; border:none; color:#fff; font-weight:600; cursor:pointer; margin-left:15px; opacity:.6; font-size: 14px; text-transform: uppercase; }
-        nav button.active{ opacity:1; color:#f5c400; border-bottom: 2px solid #f5c400; padding-bottom: 5px; }
+        /* သင့် Design အတိုင်း အနက်ရောင် Theme အတိအကျ */
+        body { margin: 0; background: #0b0f14; color: #fff; font-family: sans-serif; }
+        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f5c400; background: #0d121a; }
+        header h1 { color: #f5c400; margin: 0; font-size: 24px; }
         
-        .controls{ padding:15px 20px; display:flex; gap:10px; background: #111823; }
-        select, .refresh-btn{ background:#1a222f; color:#f5c400; border:1px solid #f5c400; padding:8px 12px; border-radius:6px; cursor:pointer; font-weight:bold; }
+        nav button { background: none; border: none; color: #fff; font-weight: bold; cursor: pointer; margin-left: 15px; opacity: 0.6; text-transform: uppercase; }
+        nav button.active { opacity: 1; color: #f5c400; border-bottom: 2px solid #f5c400; padding-bottom: 5px; }
 
-        section{ display:none; padding:20px; }
-        section.active{ display:block; }
+        .container { padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
 
-        /* Card Design - သင်လိုချင်တဲ့ ပုံစံအတိုင်း */
-        .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:15px; }
-        .card{ background: #151c26; padding:20px; border-radius:12px; border: 1px solid #2d3748; transition: 0.3s; position: relative; }
+        /* Card Design - Screenshot ထဲကအတိုင်း */
+        .card { 
+            background: #151c26; 
+            border: 1px solid #2d3748; 
+            border-radius: 10px; 
+            padding: 20px; 
+            text-align: center;
+            transition: 0.3s;
+        }
         .card:hover { border-color: #f5c400; }
-        .league-tag { font-size: 10px; color: #888; display: block; margin-bottom: 12px; text-transform: uppercase; }
-        
+        .league-name { font-size: 10px; color: #888; display: block; margin-bottom: 15px; text-transform: uppercase; }
         .match-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .team { flex: 1; text-align: center; }
-        .team-name { font-size: 14px; font-weight: bold; }
-        .vs { color: #f5c400; font-weight: 900; font-size: 12px; padding: 0 10px; }
-        
-        .match-date { font-size: 11px; color: #f5c400; text-align: center; border-top: 1px solid #1f2937; padding-top: 10px; opacity: 0.8; }
-        .loading { text-align: center; padding: 50px; color: #888; grid-column: 1/-1; }
+        .team { font-size: 14px; font-weight: bold; flex: 1; }
+        .vs { color: #f5c400; font-weight: 900; padding: 0 10px; font-size: 12px; }
+        .time { color: #f5c400; font-size: 11px; border-top: 1px solid #2d3748; padding-top: 10px; }
+
+        section { display: none; }
+        section.active { display: block; }
     </style>
 </head>
 <body>
@@ -39,73 +41,51 @@
 <header>
     <h1>GOAL GUIDE</h1>
     <nav>
-        <button id="btn-live" class="active" onclick="switchTab('live')">LIVE</button>
-        <button id="btn-fixtures" onclick="switchTab('fixtures')">FIXTURES</button>
+        <button class="tab-btn active" onclick="showSection('fixtures', this)">FIXTURES</button>
+        <button class="tab-btn" onclick="showSection('live', this)">LIVE</button>
+        <button class="tab-btn" onclick="showSection('highlights', this)">HIGHLIGHTS</button>
     </nav>
 </header>
 
-<div class="controls">
-    <select id="leagueSelect" onchange="fetchData()">
-        <option value="4328">Premier League</option>
-        <option value="4335">La Liga</option>
-        <option value="4332">Serie A</option>
-        <option value="4331">Bundesliga</option>
-    </select>
-    <button class="refresh-btn" onclick="fetchData()">REFRESH</button>
+<div class="container">
+    <section id="fixtures" class="active">
+        <div class="grid">
+            <div class="card">
+                <span class="league-name">English League 1</span>
+                <div class="match-row">
+                    <div class="team">AFC Wimbledon</div>
+                    <div class="vs">VS</div>
+                    <div class="team">Bolton</div>
+                </div>
+                <div class="time">2026-01-31 | 12:30 MMT</div>
+            </div>
+            </div>
+    </section>
+
+    <section id="live">
+        <div style="text-align: center; color: #888; margin-top: 50px;">
+            လက်ရှိတွင် Live ပွဲစဉ်များ မရှိသေးပါ။
+        </div>
+    </section>
+
+    <section id="highlights">
+        <div style="text-align: center; color: #888; margin-top: 50px;">
+            Highlights ဗီဒီယိုများ မရှိသေးပါ။
+        </div>
+    </section>
 </div>
 
-<section id="live" class="active"><div id="liveGrid" class="grid"></div></section>
-<section id="fixtures"><div id="fixtureGrid" class="grid"></div></section>
-
 <script>
-    // Public API - No Key Needed
-    const BASE_URL = "https://www.thesportsdb.com/api/v1/json/3";
-
-    async function fetchData() {
-        const leagueId = document.getElementById('leagueSelect').value;
-        const activeTab = document.querySelector('section.active').id;
-        const grid = document.getElementById(activeTab === 'live' ? 'liveGrid' : 'fixtureGrid');
-
-        grid.innerHTML = '<div class="loading">အချက်အလက်များ ရယူနေသည်...</div>';
-
-        try {
-            // Next Events API ကို သုံးထားပါတယ်
-            const response = await fetch(`${BASE_URL}/eventsnextleague.php?id=${leagueId}`);
-            const data = await response.json();
-
-            grid.innerHTML = "";
-            if (!data.events) {
-                grid.innerHTML = '<div class="loading">ပွဲစဉ်များ မရှိသေးပါ။</div>';
-                return;
-            }
-
-            data.events.forEach(match => {
-                grid.innerHTML += `
-                    <div class="card">
-                        <span class="league-tag">${match.strLeague}</span>
-                        <div class="match-row">
-                            <div class="team"><div class="team-name">${match.strHomeTeam}</div></div>
-                            <div class="vs">VS</div>
-                            <div class="team"><div class="team-name">${match.strAwayTeam}</div></div>
-                        </div>
-                        <div class="match-date">${match.dateEvent} | ${match.strTime.substring(0,5)} MMT</div>
-                    </div>`;
-            });
-        } catch (e) {
-            grid.innerHTML = '<div class="loading">Error: အင်တာနက် လိုင်းစစ်ဆေးပါ သို့မဟုတ် ခေတ္တစောင့်ပါ။</div>';
-        }
-    }
-
-    function switchTab(tab) {
+    // Tab ပြောင်းတဲ့ Function (အခု ဒါနှိပ်ရင် အလုပ်လုပ်ပါမယ်)
+    function showSection(id, btn) {
+        // အရင်ရှိနေတဲ့ Active တွေကို ဖျောက်မယ်
         document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(tab).classList.add('active');
-        document.getElementById('btn-' + tab).classList.add('active');
-        fetchData();
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
+        // နှိပ်လိုက်တဲ့ Section ကို ပြမယ်
+        document.getElementById(id).classList.add('active');
+        btn.classList.add('active');
     }
-
-    // Initial Load
-    fetchData();
 </script>
 
 </body>
