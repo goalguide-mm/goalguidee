@@ -202,51 +202,64 @@ async function loadLive(){
 
 /* ===== HIGHLIGHTS (TODAY / YESTERDAY) ===== */
 async function loadHighlights(){
-  const box=document.getElementById("highlightBox");
-  box.innerHTML="<div class='center'>Loading...</div>";
+  const box = document.getElementById("highlightBox");
+  box.innerHTML = "<div class='center'>Loading...</div>";
 
   try{
-    const r=await fetch(SCOREBAT);
-    const j=await r.json();
+    const r = await fetch(SCOREBAT);
+    const j = await r.json();
 
-    const nowMMT=new Date(Date.now()+6.5*60*60*1000);
-    const today=nowMMT.toISOString().split("T")[0];
-    const y=new Date(nowMMT);y.setDate(y.getDate()-1);
-    const yesterday=y.toISOString().split("T")[0];
+    if(!j.response || j.response.length === 0){
+      box.innerHTML="<div class='center'>No highlights</div>";
+      return;
+    }
 
-    const list=j.response.filter(v=>{
-      const d=v.date.substring(0,10);
-      return d===today||d===yesterday;
+    // Myanmar Time safe (no ISO bug)
+    const now = new Date(Date.now()+6.5*60*60*1000);
+    const today = now.toISOString().slice(0,10);
+
+    const y = new Date(now);
+    y.setDate(y.getDate()-1);
+    const yesterday = y.toISOString().slice(0,10);
+
+    const list = j.response.filter(v=>{
+      if(!v.videos || v.videos.length===0) return false;
+      const d = v.date.slice(0,10);
+      return d===today || d===yesterday;
     });
 
-    box.innerHTML=list.length?list.map(v=>{
-      const d=v.date.substring(0,10);
-      const badge=d===today
-        ?"<span class='badge today'>TODAY</span>"
-        :"<span class='badge yesterday'>YESTERDAY</span>";
+    if(list.length===0){
+      box.innerHTML="<div class='center'>No Today / Yesterday highlights</div>";
+      return;
+    }
 
-      const embed=v.videos[0].embed
+    box.innerHTML = list.map(v=>{
+      const d = v.date.slice(0,10);
+      const badge = d===today
+        ? "<span class='badge today'>TODAY</span>"
+        : "<span class='badge yesterday'>YESTERDAY</span>";
+
+      const embed = v.videos[0].embed
         .replace("autoplay=1","autoplay=0")
         .replace("<iframe","<iframe loading='lazy'");
 
       return `
-      <div class="card">
-        ${badge}
-        <div class="league">${v.competition}</div>
-        <div style="font-weight:bold;font-size:13px;margin-bottom:8px">
-          ${v.title}
+        <div class="card">
+          ${badge}
+          <div class="league">${v.competition}</div>
+          <div style="font-weight:bold;font-size:13px;margin-bottom:8px">
+            ${v.title}
+          </div>
+          <div class="video">${embed}</div>
         </div>
-        <div class="video">${embed}</div>
-      </div>`;
-    }).join(""):"<div class='center'>No highlights</div>";
+      `;
+    }).join("");
 
-  }catch{
-    box.innerHTML="<div class='center'>Highlight error</div>";
+  }catch(err){
+    console.error(err);
+    box.innerHTML="<div class='center'>Highlight service unavailable</div>";
   }
 }
-
-setInterval(loadHighlights,600000);
-loadLive();
 </script>
 
 </body>
