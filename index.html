@@ -5,204 +5,102 @@
 <title>GOAL GUIDE</title>
 
 <link rel="icon" type="image/png" href="IMG_20260123_104505_958.jpg">
-
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Poppins:wght@600&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:'Poppins', sans-serif;
-  background:#0b0f14;
-  color:#fff;
-}
+body{margin:0;font-family:'Poppins',sans-serif;background:#0b0f14;color:#fff}
 
 /* ================= HEADER ================= */
 header{
-  padding:14px 22px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:3px solid #f5c400;
-  background:#0d121a;
-  box-shadow:0 4px 10px rgba(0,0,0,.5);
+  padding:14px 22px;display:flex;justify-content:space-between;align-items:center;
+  border-bottom:3px solid #f5c400;background:#0d121a;
+  box-shadow:0 4px 10px rgba(0,0,0,.5)
 }
-
-.logo-area{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
+.logo-area{display:flex;align-items:center;gap:15px}
 .logo-area img{
-  width:50px;
-  height:50px;
-  object-fit:cover;
-  border-radius:50%;
-  border:2px solid #f5c400;
-  padding:2px;
-  background:#000;
+  width:50px;height:50px;object-fit:cover;border-radius:50%;
+  border:2px solid #f5c400;padding:2px;background:#000
 }
-
 header h1{
-  margin:0;
-  color:#f5c400;
-  font-family:'Montserrat',sans-serif;
-  font-size:26px;
-  font-weight:800;
-  letter-spacing:1px;
+  margin:0;color:#f5c400;font-family:'Montserrat',sans-serif;
+  font-size:26px;font-weight:800;letter-spacing:1px
 }
 
 /* ================= NAV ================= */
 nav button{
-  background:none;
-  border:none;
-  color:#fff;
-  font-weight:600;
-  cursor:pointer;
-  margin-left:12px;
-  opacity:.6;
+  background:none;border:none;color:#fff;font-weight:600;
+  cursor:pointer;margin-left:12px;opacity:.6
 }
-
 nav button.active{
-  opacity:1;
-  color:#f5c400;
-  border-bottom:2px solid #f5c400;
-  padding-bottom:4px;
+  opacity:1;color:#f5c400;border-bottom:2px solid #f5c400;padding-bottom:4px
 }
 
 /* ================= CONTROLS ================= */
 .controls{
-  padding:14px 22px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  background:#111823;
+  padding:14px 22px;display:flex;gap:10px;flex-wrap:wrap;background:#111823
 }
-
 select,button{
-  background:#1a222f;
-  color:#f5c400;
-  border:1px solid #f5c400;
-  padding:8px 15px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
+  background:#1a222f;color:#f5c400;border:1px solid #f5c400;
+  padding:8px 15px;border-radius:8px;cursor:pointer;font-weight:bold
 }
 
 /* ================= SECTIONS ================= */
 section{display:none;padding:22px}
 section.active{display:block}
-
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:18px;
+  gap:18px
 }
 
 /* ================= CARD ================= */
 .card{
   background:linear-gradient(145deg,#151c26,#0d121a);
-  padding:18px;
-  border-radius:15px;
-  border:1px solid #2d3748;
-  display:flex;
-  flex-direction:column;
-  transition:.3s;
+  padding:18px;border-radius:15px;border:1px solid #2d3748;
+  display:flex;flex-direction:column;transition:.3s
 }
+.card:hover{transform:translateY(-5px);border-color:#f5c400}
 
-.card:hover{
-  transform:translateY(-5px);
-  border-color:#f5c400;
-}
+.league{font-size:11px;color:#f5c400;font-weight:bold;margin-bottom:10px}
 
-.league{
-  font-size:11px;
-  color:#f5c400;
-  font-weight:bold;
-  margin-bottom:12px;
-}
-
-/* ===== MATCH ROW (LOGO + NAME) ===== */
+/* ===== MATCH ===== */
 .match{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  min-height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;min-height:60px
 }
-
 .team{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:14px;
-  font-weight:600;
-  width:40%;
+  display:flex;align-items:center;gap:8px;
+  font-size:14px;font-weight:600;width:40%
 }
-
-.team.right{
-  justify-content:flex-end;
-  text-align:right;
-}
-
-.team img{
-  width:28px;
-  height:28px;
-  object-fit:contain;
-}
-
-.vs{
-  color:#f5c400;
-  font-weight:900;
-  font-size:13px;
-}
+.team.right{justify-content:flex-end;text-align:right}
+.team img{width:28px;height:28px;object-fit:contain}
+.vs{color:#f5c400;font-weight:900;font-size:13px}
 
 /* ===== TIME ===== */
 .time{
-  margin-top:auto;
-  font-size:12px;
-  color:#f5c400;
-  background:rgba(245,196,0,.1);
-  padding:8px;
-  border-radius:8px;
-  text-align:center;
-  font-weight:bold;
+  margin-top:auto;font-size:12px;color:#f5c400;
+  background:rgba(245,196,0,.1);padding:8px;
+  border-radius:8px;text-align:center;font-weight:bold
 }
 
 /* ===== VIDEO ===== */
 .video{
-  position:relative;
-  padding-bottom:56.25%;
-  height:0;
-  margin-top:12px;
-  border-radius:10px;
-  overflow:hidden;
-  border:1px solid #333;
+  position:relative;padding-bottom:56.25%;height:0;
+  margin-top:12px;border-radius:10px;overflow:hidden;border:1px solid #333
 }
+.video iframe{position:absolute;width:100%;height:100%;border:0}
 
-.video iframe{
-  position:absolute;
-  width:100%;
-  height:100%;
-  left:0;
-  top:0;
-  border:0;
+/* ===== HIGHLIGHT LABEL ===== */
+.badge{
+  display:inline-block;font-size:10px;padding:3px 8px;
+  border-radius:12px;font-weight:bold;margin-bottom:6px
 }
+.today{background:#f5c400;color:#000}
+.yesterday{background:#2d3748;color:#f5c400}
 
-.center{
-  text-align:center;
-  opacity:.6;
-  padding:40px 0;
-  grid-column:1/-1;
-}
-
-footer{
-  text-align:center;
-  padding:25px;
-  font-size:12px;
-  opacity:.5;
-}
+.center{text-align:center;opacity:.6;padding:40px 0;grid-column:1/-1}
+footer{text-align:center;padding:25px;font-size:12px;opacity:.5}
 </style>
 </head>
 
@@ -246,9 +144,9 @@ function showPage(id,btn){
   document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   btn.classList.add("active");
-  if(id==="highlights")loadHighlights();
-  if(id==="fixtures")loadFixtures();
   if(id==="live")loadLive();
+  if(id==="fixtures")loadFixtures();
+  if(id==="highlights")loadHighlights();
 }
 
 function refreshCurrent(){
@@ -265,6 +163,7 @@ function mmt(d,t){
   return x.toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})+" MMT";
 }
 
+/* ===== FIXTURES ===== */
 async function loadFixtures(){
   const league=document.getElementById("league").value;
   const box=document.getElementById("fixtureBox");
@@ -275,20 +174,15 @@ async function loadFixtures(){
   <div class="card">
     <div class="league">${e.strLeague}</div>
     <div class="match">
-      <div class="team">
-        <img src="${e.strHomeTeamBadge}">
-        ${e.strHomeTeam}
-      </div>
+      <div class="team"><img src="${e.strHomeTeamBadge}">${e.strHomeTeam}</div>
       <div class="vs">VS</div>
-      <div class="team right">
-        ${e.strAwayTeam}
-        <img src="${e.strAwayTeamBadge}">
-      </div>
+      <div class="team right">${e.strAwayTeam}<img src="${e.strAwayTeamBadge}"></div>
     </div>
     <div class="time">${mmt(e.dateEvent,e.strTime)}</div>
   </div>`).join(""):"<div class='center'>No data</div>";
 }
 
+/* ===== LIVE ===== */
 async function loadLive(){
   const box=document.getElementById("liveBox");
   box.innerHTML="<div class='center'>Loading...</div>";
@@ -298,33 +192,60 @@ async function loadLive(){
   <div class="card">
     <div class="league">${e.strLeague}</div>
     <div class="match">
-      <div class="team">
-        <img src="${e.strHomeTeamBadge}">
-        ${e.strHomeTeam}
-      </div>
+      <div class="team"><img src="${e.strHomeTeamBadge}">${e.strHomeTeam}</div>
       <div class="vs">VS</div>
-      <div class="team right">
-        ${e.strAwayTeam}
-        <img src="${e.strAwayTeamBadge}">
-      </div>
+      <div class="team right">${e.strAwayTeam}<img src="${e.strAwayTeamBadge}"></div>
     </div>
     <div class="time">${mmt(e.dateEvent,e.strTime)}</div>
   </div>`).join(""):"<div class='center'>No matches</div>";
 }
 
+/* ===== HIGHLIGHTS (TODAY / YESTERDAY) ===== */
 async function loadHighlights(){
   const box=document.getElementById("highlightBox");
   box.innerHTML="<div class='center'>Loading...</div>";
-  const r=await fetch(SCOREBAT);
-  const j=await r.json();
-  box.innerHTML=j.response.map(v=>`
-  <div class="card">
-    <div class="league">${v.competition}</div>
-    <div style="font-weight:bold;font-size:13px">${v.title}</div>
-    <div class="video">${v.videos[0].embed}</div>
-  </div>`).join("");
+
+  try{
+    const r=await fetch(SCOREBAT);
+    const j=await r.json();
+
+    const nowMMT=new Date(Date.now()+6.5*60*60*1000);
+    const today=nowMMT.toISOString().split("T")[0];
+    const y=new Date(nowMMT);y.setDate(y.getDate()-1);
+    const yesterday=y.toISOString().split("T")[0];
+
+    const list=j.response.filter(v=>{
+      const d=v.date.substring(0,10);
+      return d===today||d===yesterday;
+    });
+
+    box.innerHTML=list.length?list.map(v=>{
+      const d=v.date.substring(0,10);
+      const badge=d===today
+        ?"<span class='badge today'>TODAY</span>"
+        :"<span class='badge yesterday'>YESTERDAY</span>";
+
+      const embed=v.videos[0].embed
+        .replace("autoplay=1","autoplay=0")
+        .replace("<iframe","<iframe loading='lazy'");
+
+      return `
+      <div class="card">
+        ${badge}
+        <div class="league">${v.competition}</div>
+        <div style="font-weight:bold;font-size:13px;margin-bottom:8px">
+          ${v.title}
+        </div>
+        <div class="video">${embed}</div>
+      </div>`;
+    }).join(""):"<div class='center'>No highlights</div>";
+
+  }catch{
+    box.innerHTML="<div class='center'>Highlight error</div>";
+  }
 }
 
+setInterval(loadHighlights,600000);
 loadLive();
 </script>
 
