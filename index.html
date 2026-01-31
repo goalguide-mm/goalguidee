@@ -1,255 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOAL GUIDE - Professional Hub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOAL GUIDE - Professional</title>
+    <style>
+        /* Base Styling */
+        body { margin: 0; font-family: 'Arial', sans-serif; background: #0b0f14; color: #fff; }
+        
+        /* Header & Nav */
+        header { 
+            padding: 15px 25px; background: #0d121a; 
+            border-bottom: 2px solid #f5c400; 
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        header h1 { color: #f5c400; margin: 0; font-size: 24px; font-weight: 800; }
+        nav button { 
+            background: none; border: none; color: #fff; 
+            margin-left: 15px; cursor: pointer; font-weight: bold; opacity: 0.6;
+        }
+        nav button.active { opacity: 1; color: #f5c400; border-bottom: 2px solid #f5c400; padding-bottom: 5px; }
 
-<style>
-/* CSS Reset & General Styles */
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background:#0b0f14;
-  color:#fff;
-}
+        /* Filter Controls */
+        .controls { padding: 15px 25px; display: flex; gap: 10px; background: #111823; }
+        select, .refresh-btn { 
+            background: #1a222f; color: #f5c400; border: 1px solid #f5c400; 
+            padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold;
+        }
 
-/* Header & Navigation */
-header{
-  padding:15px 22px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:2px solid #f5c400;
-  background:#0d121a;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-header h1{margin:0; color:#f5c400; font-size: 24px; font-weight: 800;}
+        /* Grid System */
+        .container { padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
 
-nav button{
-  background:none; border:none;
-  color:#fff; font-weight:600;
-  cursor:pointer; margin-left:12px;
-  opacity:.6; transition: 0.3s;
-}
-nav button.active{opacity:1; color:#f5c400; border-bottom: 2px solid #f5c400; padding-bottom: 5px;}
+        /* Card Design - အတိအကျ ပြန်ရေးထားခြင်း */
+        .card { 
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 12px; padding: 20px; text-align: center; transition: 0.3s;
+        }
+        .card:hover { border-color: #f5c400; background: rgba(245, 196, 0, 0.05); }
+        .league-name { font-size: 10px; color: #888; display: block; margin-bottom: 15px; text-transform: uppercase; }
+        .match-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .team { flex: 1; font-weight: bold; font-size: 14px; }
+        .vs { color: #f5c400; font-weight: 900; font-size: 12px; padding: 0 10px; }
+        .time-tag { font-size: 12px; color: #f5c400; font-weight: bold; border-top: 1px solid #222; padding-top: 10px; }
 
-/* Controls Area */
-.controls{
-  padding:15px 22px;
-  display:flex; gap:10px; flex-wrap:wrap;
-  background: #111823;
-}
-select, .refresh-btn{
-  background:#1a222f;
-  color:#f5c400;
-  border:1px solid #f5c400;
-  padding:8px 15px;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight: bold;
-}
+        .video-box iframe { width: 100%; border-radius: 8px; height: 180px; }
 
-/* Section & Grid System */
-section{display:none; padding:20px;}
-section.active{display:block;}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:20px;
-}
-
-/* Card Design - သင်ပြထားတဲ့ ပုံစံအတိုင်း */
-.card{
-  background:linear-gradient(145deg,#151c26,#0d121a);
-  padding:20px;
-  border-radius:12px;
-  border:1px solid #2d3748;
-  transition: 0.3s;
-}
-.card:hover{ border-color: #f5c400; transform: translateY(-3px); }
-
-.league-tag{font-size:11px; opacity:.7; margin-bottom:12px; color: #f5c400; text-transform: uppercase;}
-
-.match-row{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  align-items:center; gap:10px;
-}
-.team{ font-weight: bold; font-size: 14px; }
-.vs{color:#f5c400; font-weight:900; font-size: 13px;}
-
-.info-bar{
-  margin-top:15px;
-  font-size:12px;
-  color:#f5c400;
-  background:rgba(245, 196, 0, 0.1);
-  padding:6px;
-  border-radius:6px;
-  text-align: center;
-}
-
-/* Video Frame */
-.video-box{
-  position:relative;
-  padding-bottom:56.25%;
-  height:0;
-  margin-top:12px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-.video-box iframe{
-  position:absolute; width:100%; height:100%; left:0; top:0; border:0;
-}
-
-.loading{ text-align:center; padding:50px; color:#888; grid-column: 1/-1; }
-
-footer{ text-align:center; padding:30px; font-size:12px; opacity:.4; }
-</style>
+        /* Status Messages */
+        .status { text-align: center; padding: 50px; color: #888; grid-column: 1/-1; }
+        section { display: none; }
+        section.active { display: block; }
+    </style>
 </head>
-
 <body>
 
 <header>
-  <h1>GOAL GUIDE</h1>
-  <nav>
-    <button id="btn-live" class="active" onclick="showPage('live')">LIVE</button>
-    <button id="btn-fixtures" onclick="showPage('fixtures')">FIXTURES</button>
-    <button id="btn-highlights" onclick="showPage('highlights')">HIGHLIGHTS</button>
-  </nav>
+    <h1>GOAL GUIDE</h1>
+    <nav>
+        <button id="nav-live" onclick="tab('live')">LIVE</button>
+        <button id="nav-fixtures" class="active" onclick="tab('fixtures')">FIXTURES</button>
+        <button id="nav-highlights" onclick="tab('highlights')">HIGHLIGHTS</button>
+    </nav>
 </header>
 
 <div class="controls">
-  <select id="leagueSelect" onchange="refreshContent()">
-    <option value="4328">Premier League</option>
-    <option value="4335">La Liga</option>
-    <option value="4332">Serie A</option>
-    <option value="4331">Bundesliga</option>
-    <option value="4334">Ligue 1</option>
-  </select>
-
-  <button class="refresh-btn" onclick="refreshContent()">REFRESH</button>
+    <select id="leagueId" onchange="refresh()">
+        <option value="4328">Premier League</option>
+        <option value="4335">La Liga</option>
+        <option value="4332">Serie A</option>
+        <option value="4331">Bundesliga</option>
+    </select>
+    <button class="refresh-btn" onclick="refresh()">REFRESH</button>
 </div>
 
-<section id="live" class="active">
-  <div id="liveBox" class="grid"></div>
-</section>
-
-<section id="fixtures">
-  <div id="fixtureBox" class="grid"></div>
-</section>
-
-<section id="highlights">
-  <div id="highlightBox" class="grid"></div>
-</section>
-
-<footer>Demo Version · Real-time Myanmar Time (MMT)</footer>
+<div class="container">
+    <section id="live"><div class="grid" id="liveGrid"></div></section>
+    <section id="fixtures" class="active"><div class="grid" id="fixtureGrid"></div></section>
+    <section id="highlights"><div class="grid" id="highlightGrid"></div></section>
+</div>
 
 <script>
-// API Sources (Public - No Pending Key Needed)
-const THE_SPORTS_DB = "https://www.thesportsdb.com/api/v1/json/3";
-const HIGHLIGHTS_API = "https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
+    // Public APIs - No Keys Needed
+    const SPORTS_API = "https://www.thesportsdb.com/api/v1/json/3";
+    const VIDEO_API = "https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
 
-function showPage(id) {
-  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
-  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  document.getElementById('btn-' + id).classList.add("active");
-  refreshContent();
-}
-
-function refreshContent() {
-  const activeTab = document.querySelector('section.active').id;
-  if (activeTab === 'live') loadMatches('liveBox', true);
-  if (activeTab === 'fixtures') loadMatches('fixtureBox', false);
-  if (activeTab === 'highlights') loadHighlights();
-}
-
-/* UTC to Myanmar Time Converter */
-function toMMT(date, time) {
-  if (!date || !time) return "TBA";
-  const dt = new Date(`${date}T${time}Z`);
-  dt.setMinutes(dt.setMinutes() + 390); // UTC+6:30
-  return dt.toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) + " MMT";
-}
-
-async function loadMatches(boxId, isLiveTab) {
-  const box = document.getElementById(boxId);
-  const leagueId = document.getElementById('leagueSelect').value;
-  box.innerHTML = '<div class="loading">Loading matches...</div>';
-
-  try {
-    // API ကနေ Data ခေါ်ယူခြင်း
-    const url = isLiveTab ? `${THE_SPORTS_DB}/eventsday.php?s=Soccer` : `${THE_SPORTS_DB}/eventsnextleague.php?id=${leagueId}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    
-    box.innerHTML = "";
-    let matches = data.events || [];
-
-    // Live Tab အတွက် ရွေးချယ်ထားတဲ့ League အလိုက် Filter လုပ်ပေးခြင်း
-    if (isLiveTab) matches = matches.filter(m => m.idLeague === leagueId);
-
-    if (matches.length === 0) {
-      box.innerHTML = `<div class="loading">ပွဲစဉ်များ မရှိသေးပါ။</div>`;
-      return;
+    function tab(name) {
+        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById(name).classList.add('active');
+        document.getElementById('nav-' + name).classList.add('active');
+        refresh();
     }
 
-    matches.forEach(m => {
-      box.innerHTML += `
-        <div class="card">
-          <div class="league-tag">${m.strLeague}</div>
-          <div class="match-row">
-            <div class="team" style="text-align: right;">${m.strHomeTeam}</div>
-            <div class="vs">VS</div>
-            <div class="team" style="text-align: left;">${m.strAwayTeam}</div>
-          </div>
-          <div class="info-bar">${toMMT(m.dateEvent, m.strTime)}</div>
-        </div>`;
-    });
-  } catch (err) {
-    box.innerHTML = '<div class="loading">Error loading data. Try again later.</div>';
-  }
-}
+    async function refresh() {
+        const activeTab = document.querySelector('section.active').id;
+        const league = document.getElementById('leagueId').value;
+        const leagueName = document.getElementById('leagueId').options[document.getElementById('leagueId').selectedIndex].text;
 
-async function loadHighlights() {
-  const box = document.getElementById('highlightBox');
-  const leagueName = document.getElementById('leagueSelect').options[document.getElementById('leagueSelect').selectedIndex].text;
-  box.innerHTML = '<div class="loading">Loading highlights...</div>';
-
-  try {
-    const res = await fetch(HIGHLIGHTS_API);
-    const data = await res.json();
-    
-    // League နာမည်နဲ့ ကိုက်ညီတဲ့ ဗီဒီယိုတွေကို စစ်ထုတ်ခြင်း
-    const filtered = data.response.filter(v => v.competition.toLowerCase().includes(leagueName.toLowerCase()));
-
-    box.innerHTML = "";
-    if (filtered.length === 0) {
-      box.innerHTML = `<div class="loading">${leagueName} Highlights မတွေ့ရှိပါ။</div>`;
-      return;
+        if(activeTab === 'fixtures') loadMatches(`${SPORTS_API}/eventsnextleague.php?id=${league}`, 'fixtureGrid');
+        if(activeTab === 'live') loadMatches(`${SPORTS_API}/eventsday.php?s=Soccer`, 'liveGrid', league);
+        if(activeTab === 'highlights') loadHighlights(leagueName);
     }
 
-    filtered.slice(0, 8).forEach(v => {
-      box.innerHTML += `
-        <div class="card">
-          <div class="league-tag">${v.competition}</div>
-          <div style="font-weight:bold; font-size:14px; margin-bottom:10px;">${v.title}</div>
-          <div class="video-box">${v.videos[0].embed}</div>
-        </div>`;
-    });
-  } catch (err) {
-    box.innerHTML = '<div class="loading">ဗီဒီယိုများ ခေါ်ယူ၍မရပါ။</div>';
-  }
-}
+    async function loadMatches(url, gridId, filterId = null) {
+        const grid = document.getElementById(gridId);
+        grid.innerHTML = '<div class="status">Loading...</div>';
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            grid.innerHTML = "";
+            let events = data.events || [];
+            
+            if(filterId) events = events.filter(e => e.idLeague === filterId);
 
-// Initial Load
-refreshContent();
+            if(events.length === 0) {
+                grid.innerHTML = '<div class="status">ပွဲစဉ်များ မရှိသေးပါ။</div>';
+                return;
+            }
+
+            events.forEach(m => {
+                grid.innerHTML += `
+                    <div class="card">
+                        <span class="league-name">${m.strLeague}</span>
+                        <div class="match-row">
+                            <div class="team">${m.strHomeTeam}</div>
+                            <div class="vs">VS</div>
+                            <div class="team">${m.strAwayTeam}</div>
+                        </div>
+                        <div class="time-tag">${m.dateEvent} | ${m.strTime ? m.strTime.substring(0,5) : ''} MMT</div>
+                    </div>`;
+            });
+        } catch (e) { grid.innerHTML = '<div class="status">Error Loading Data</div>'; }
+    }
+
+    async function loadHighlights(lName) {
+        const grid = document.getElementById('highlightGrid');
+        grid.innerHTML = '<div class="status">Loading...</div>';
+        try {
+            const res = await fetch(VIDEO_API);
+            const data = await res.json();
+            const filtered = data.response.filter(v => v.competition.includes(lName));
+            grid.innerHTML = "";
+            
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div class="status">${lName} အတွက် Highlight မရှိသေးပါ။</div>`;
+                return;
+            }
+
+            filtered.slice(0, 8).forEach(v => {
+                grid.innerHTML += `
+                    <div class="card">
+                        <span class="league-name">${v.competition}</span>
+                        <div style="margin-bottom:10px; font-weight:bold; font-size:13px;">${v.title}</div>
+                        <div class="video-box">${v.videos[0].embed}</div>
+                    </div>`;
+            });
+        } catch (e) { grid.innerHTML = '<div class="status">Highlight Error</div>'; }
+    }
+
+    // Start
+    refresh();
 </script>
-
 </body>
 </html>
