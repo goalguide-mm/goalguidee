@@ -10,20 +10,26 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0b0e14; color: white; font-family: 'Kanit', sans-serif; margin: 0; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; padding-bottom: 15px; margin-bottom: 30px; }
-        .logo-container { display: flex; align-items: center; gap: 15px; }
-        .logo-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
-        .logo-text { color: #D4AF37; font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: 3px; }
-        .section-title { color: #D4AF37; font-size: 20px; font-weight: 800; margin: 30px 0 15px 0; border-left: 5px solid #D4AF37; padding-left: 15px; text-transform: uppercase; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: #1a1d23; padding: 20px; border-radius: 15px; border: 1px solid #333; text-align: center; }
-        .btn { background: #D4AF37; color: black; padding: 10px; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: bold; width: 100%; transition: 0.3s; }
-        .btn:hover { background: #fff; }
-        .loading { color: #888; text-align: center; padding: 20px; grid-column: 1/-1; }
-        .highlight-card img { width: 100%; border-radius: 10px; height: 160px; object-fit: cover; border: 1px solid #444; }
-        .live-tag { color: #ff4d4d; font-weight: bold; animation: blink 1s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        body { background-color: #0b0e14; color: white; font-family: 'Kanit', sans-serif; margin: 0; padding: 15px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; padding-bottom: 15px; margin-bottom: 25px; }
+        .logo-container { display: flex; align-items: center; gap: 12px; }
+        .logo-img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
+        .logo-text { color: #D4AF37; font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: 2px; }
+        
+        .section-title { color: #D4AF37; font-size: 18px; font-weight: 800; margin: 30px 0 15px 0; border-left: 5px solid #D4AF37; padding-left: 12px; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        
+        .card { background: #1a1d23; padding: 18px; border-radius: 12px; border: 1px solid #333; text-align: center; position: relative; transition: 0.3s; }
+        .card:hover { border-color: #D4AF37; transform: translateY(-3px); }
+        
+        .btn { background: #D4AF37; color: black; padding: 10px; border-radius: 6px; text-decoration: none; display: inline-block; margin-top: 12px; font-weight: bold; width: 100%; box-sizing: border-box; }
+        .loading { color: #888; text-align: center; padding: 30px; grid-column: 1/-1; width: 100%; }
+        
+        .highlight-card img { width: 100%; border-radius: 8px; height: 160px; object-fit: cover; border: 1px solid #444; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-bottom: 8px; background: #333; }
+        .live { background: #ff4d4d; color: white; animation: blink 1s infinite; }
+        
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -33,86 +39,82 @@
             <img src="IMG_20260123_104505_958.jpg" alt="Logo" class="logo-img">
             <div class="logo-text">GOAL GUIDE</div>
         </div>
-        <button onclick="fetchAllData()" style="background:#333; color:white; border:1px solid #D4AF37; padding:8px 15px; border-radius:5px; cursor:pointer; font-weight: bold;">REFRESH</button>
+        <button onclick="window.location.reload()" style="background:transparent; color:#D4AF37; border:1px solid #D4AF37; padding:6px 12px; border-radius:4px; cursor:pointer; font-size: 12px;">REFRESH</button>
     </div>
 
-    <div class="section-title">Matches (ပွဲစဉ်များ)</div>
-    <div id="match-list" class="grid"><div class="loading">ပွဲစဉ်များ ရှာဖွေနေသည်...</div></div>
+    <div class="section-title">Match Updates (ပွဲစဉ်များ)</div>
+    <div id="match-list" class="grid"><div class="loading">Data များ ရယူနေသည်...</div></div>
 
     <div class="section-title">Latest Highlights (ဗီဒီယိုများ)</div>
-    <div id="highlight-list" class="grid"><div class="loading">Highlights ရှာဖွေနေသည်...</div></div>
+    <div id="highlight-list" class="grid"><div class="loading">ဗီဒီယိုများ ရယူနေသည်...</div></div>
 
     <script>
-        // API Keys (သတိထားရန်- ဤ Key များသည် Limit ရှိပါသည်)
-        const RAPID_API_KEY = "d37030c761msh9a0fce3d0a1fab3p1819a3jsnb343019b616b";
+        // API Configuration
+        const HIGHLIGHT_URL = "https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
+        const MATCH_URL = "https://allsportsapi2.p.rapidapi.com/api/tv/events/live";
+        const RAPID_KEY = "d37030c761msh9a0fce3d0a1fab3p1819a3jsnb343019b616b";
 
-        async function fetchAllData() {
-            getMatches();
-            getHighlights();
+        // Main Function
+        async function loadContent() {
+            fetchMatches();
+            fetchHighlights();
         }
 
-        // ပွဲစဉ်ဇယားနှင့် Live ပွဲများ ဆွဲယူခြင်း
-        async function getMatches() {
-            const container = document.getElementById('match-list');
+        // Fetch Matches (Live & Today)
+        async function fetchMatches() {
+            const list = document.getElementById('match-list');
             try {
-                const today = new Date().toISOString().split('T')[0];
-                const res = await fetch(`https://allsportsapi2.p.rapidapi.com/api/tv/events/date/${today}`, {
-                    headers: { 'x-rapidapi-key': RAPID_API_KEY, 'x-rapidapi-host': 'allsportsapi2.p.rapidapi.com' }
+                const response = await fetch(MATCH_URL, {
+                    headers: { 'x-rapidapi-key': RAPID_KEY, 'x-rapidapi-host': 'allsportsapi2.p.rapidapi.com' }
                 });
-                const data = await res.json();
-                container.innerHTML = "";
+                const data = await response.json();
+                list.innerHTML = "";
 
                 if (data.events && data.events.length > 0) {
-                    data.events.slice(0, 18).forEach(match => {
-                        const isLive = match.status.type === "inprogress";
-                        const time = new Date(match.startTimestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                        
-                        container.innerHTML += `
-                            <div class="card" style="${isLive ? 'border-color: #D4AF37;' : ''}">
-                                <div style="font-size: 11px; color: #888; margin-bottom: 5px;">${match.tournament.name}</div>
-                                <div class="${isLive ? 'live-tag' : ''}" style="font-size: 13px; margin-bottom: 10px;">
-                                    ${isLive ? '🔴 LIVE NOW' : '⏰ Time: ' + time}
+                    data.events.slice(0, 12).forEach(match => {
+                        const status = match.status.type === "inprogress" ? "LIVE" : "TODAY";
+                        list.innerHTML += `
+                            <div class="card">
+                                <span class="badge ${status === 'LIVE' ? 'live' : ''}">${status}</span>
+                                <div style="font-size: 12px; color: #888;">${match.tournament.name}</div>
+                                <div style="font-weight: 800; margin: 12px 0; font-size: 16px;">
+                                    ${match.homeTeam.name} <br> ${match.homeScore.current || 0} - ${match.awayScore.current || 0} <br> ${match.awayTeam.name}
                                 </div>
-                                <div style="font-weight: 800; font-size: 16px;">${match.homeTeam.name} <br>VS<br> ${match.awayTeam.name}</div>
-                                <a href="https://www.google.com/search?q=${match.homeTeam.name}+vs+${match.awayTeam.name}+live+score" target="_blank" class="btn">MATCH INFO</a>
+                                <a href="https://www.google.com/search?q=${match.homeTeam.name}+vs+${match.awayTeam.name}" target="_blank" class="btn">VIEW DETAILS</a>
                             </div>`;
                     });
                 } else {
-                    container.innerHTML = "<div class='loading'>ယခုလောလောဆယ် ပွဲစဉ်မရှိသေးပါ။</div>";
+                    list.innerHTML = "<div class='loading'>ယခုလောလောဆယ် တိုက်ရိုက်ပွဲစဉ်မရှိပါ။</div>";
                 }
-            } catch (e) {
-                container.innerHTML = "<div class='loading'>ပွဲစဉ်များ ဆွဲယူ၍ မရပါ။ (Limit ပြည့်သွားနိုင်သည်)</div>";
+            } catch (error) {
+                list.innerHTML = "<div class='loading'>Matches API Limit ပြည့်သွားပါသည်။ ညဘက်တွင် ပြန်ကြည့်ပါ။</div>";
             }
         }
 
-        // Highlights ဗီဒီယိုများ ဆွဲယူခြင်း
-        async function getHighlights() {
-            const container = document.getElementById('highlight-list');
+        // Fetch Highlights (Always Active)
+        async function fetchHighlights() {
+            const list = document.getElementById('highlight-list');
             try {
-                // ScoreBat API - Token ကို Update ထပ်လုပ်ထားသည်
-                const res = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==');
-                const data = await res.json();
-                container.innerHTML = "";
+                const response = await fetch(HIGHLIGHT_URL);
+                const data = await response.json();
+                list.innerHTML = "";
 
                 if (data.response && data.response.length > 0) {
-                    data.response.slice(0, 12).forEach(vid => {
-                        container.innerHTML += `
+                    data.response.slice(0, 12).forEach(video => {
+                        list.innerHTML += `
                             <div class="card highlight-card">
-                                <img src="${vid.thumbnail}" alt="thumb">
-                                <div style="font-size: 14px; font-weight: 600; min-height: 40px; margin-top: 10px;">${vid.title}</div>
-                                <a href="${vid.matchviewUrl}" target="_blank" class="btn" style="background:#222; color:#D4AF37; border:1px solid #D4AF37;">WATCH HIGHLIGHT</a>
+                                <img src="${video.thumbnail}" alt="thumb">
+                                <div style="font-size: 14px; font-weight: 600; margin-top: 10px; height: 40px; overflow: hidden;">${video.title}</div>
+                                <a href="${video.matchviewUrl}" target="_blank" class="btn" style="background:#222; color:#D4AF37; border:1px solid #D4AF37;">WATCH HIGHLIGHT</a>
                             </div>`;
                     });
-                } else {
-                    container.innerHTML = "<div class='loading'>Highlights များ မရှိသေးပါ။</div>";
                 }
-            } catch (e) {
-                container.innerHTML = "<div class='loading'>Highlights ဆွဲယူ၍ မရပါ။</div>";
+            } catch (error) {
+                list.innerHTML = "<div class='loading'>Highlights ခေါ်ယူ၍ မရပါ။</div>";
             }
         }
 
-        // Page စဖွင့်ချင်း Data ခေါ်မည်
-        fetchAllData();
+        loadContent();
     </script>
 </body>
 </html>
