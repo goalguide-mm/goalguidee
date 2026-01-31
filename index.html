@@ -4,120 +4,67 @@
 <meta charset="UTF-8">
 <title>GOAL GUIDE</title>
 
-<link rel="icon" type="image/png" href="IMG_20260123_104505_958.jpg">
-
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Poppins:wght@600&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  background:#0b0f14;
-  color:#fff;
-}
+body{margin:0;font-family:'Poppins',sans-serif;background:#0b0f14;color:#fff}
 
 header{
-  padding:14px 22px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:3px solid #f5c400;
-  background:#0d121a;
+  padding:14px 22px;display:flex;justify-content:space-between;align-items:center;
+  border-bottom:3px solid #f5c400;background:#0d121a;
 }
-
-.logo-area{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
+.logo-area{display:flex;align-items:center;gap:15px}
 .logo-area img{
-  width:48px;height:48px;
-  border-radius:50%;
-  border:2px solid #f5c400;
-  padding:2px;
+  width:50px;height:50px;border-radius:50%;
+  border:2px solid #f5c400;padding:2px;background:#000
 }
 header h1{
-  margin:0;
-  font-family:'Montserrat',sans-serif;
-  color:#f5c400;
-  font-size:26px;
-  letter-spacing:1px;
+  margin:0;color:#f5c400;font-family:'Montserrat',sans-serif;
+  font-size:26px;font-weight:800;letter-spacing:1px
 }
 
 nav button{
-  background:none;
-  border:none;
-  color:#aaa;
-  font-weight:600;
+  background:none;border:none;color:#fff;font-weight:600;
+  cursor:pointer;margin-left:12px;opacity:.6
 }
 nav button.active{
-  color:#f5c400;
-  border-bottom:2px solid #f5c400;
-  padding-bottom:4px;
+  opacity:1;color:#f5c400;border-bottom:2px solid #f5c400;padding-bottom:4px
 }
 
-section{padding:25px}
+section{display:none;padding:22px}
+section.active{display:block}
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:18px;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
 
 .card{
   background:linear-gradient(145deg,#151c26,#0d121a);
-  padding:16px;
-  border-radius:14px;
-  border:1px solid #2d3748;
+  padding:18px;border-radius:15px;border:1px solid #2d3748
+}
+.card:hover{border-color:#f5c400}
+
+.league{font-size:11px;color:#f5c400;margin-bottom:8px;font-weight:bold}
+.match{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+.team{font-size:14px;font-weight:600}
+.vs{color:#f5c400;font-weight:900;font-size:13px}
+.time{
+  margin-top:12px;font-size:12px;color:#f5c400;
+  background:rgba(245,196,0,.1);padding:8px;border-radius:8px;text-align:center
 }
 
-.league{
-  font-size:11px;
-  color:#f5c400;
-  font-weight:bold;
-  margin-bottom:6px;
-}
+.video{position:relative;padding-bottom:56.25%;height:0;border-radius:10px;overflow:hidden}
+.video iframe{position:absolute;width:100%;height:100%;border:0}
 
+.center{text-align:center;opacity:.6;padding:40px}
+footer{text-align:center;padding:25px;font-size:12px;opacity:.5}
+
+/* ===== Highlight labels ===== */
 .badge{
-  display:inline-block;
-  font-size:10px;
-  padding:3px 8px;
-  border-radius:12px;
-  margin-bottom:6px;
-  font-weight:bold;
+  display:inline-block;font-size:10px;padding:3px 8px;
+  border-radius:12px;font-weight:bold;margin-bottom:6px
 }
 .today{background:#f5c400;color:#000}
-.yesterday{background:#444;color:#f5c400}
-
-.video{
-  position:relative;
-  padding-bottom:56.25%;
-  height:0;
-  overflow:hidden;
-  border-radius:10px;
-  background:#000;
-}
-.video iframe{
-  position:absolute;
-  top:0;left:0;
-  width:100%;
-  height:100%;
-  border:0;
-}
-
-.center{
-  text-align:center;
-  opacity:.6;
-  padding:40px 0;
-}
-
-footer{
-  text-align:center;
-  padding:25px;
-  font-size:12px;
-  opacity:.5;
-}
+.yesterday{background:#2d3748;color:#f5c400}
 </style>
 </head>
 
@@ -129,84 +76,124 @@ footer{
     <h1>GOAL GUIDE</h1>
   </div>
   <nav>
-    <button class="active">HIGHLIGHTS</button>
+    <button class="active" onclick="showPage('live',this)">LIVE</button>
+    <button onclick="showPage('fixtures',this)">FIXTURES</button>
+    <button onclick="showPage('highlights',this)">HIGHLIGHTS</button>
   </nav>
 </header>
 
-<section>
-  <div id="highlightBox" class="grid"></div>
-</section>
+<section id="live" class="active"><div id="liveBox" class="grid"></div></section>
+<section id="fixtures"><div id="fixtureBox" class="grid"></div></section>
+<section id="highlights"><div id="highlightBox" class="grid"></div></section>
 
 <footer>GOAL GUIDE © 2026 · MYANMAR TIME</footer>
 
 <script>
-const SCOREBAT =
-"https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
+const DB="https://www.thesportsdb.com/api/v1/json/3";
+const SCOREBAT="https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
 
+function showPage(id,btn){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  btn.classList.add("active");
+  if(id==="live") loadLive();
+  if(id==="fixtures") loadFixtures();
+  if(id==="highlights") loadHighlights();
+}
+
+function mmt(d,t){
+  if(!d||!t) return "TBA";
+  const x=new Date(d+"T"+t+"Z");
+  x.setMinutes(x.getMinutes()+390);
+  return x.toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})+" MMT";
+}
+
+/* ===== LIVE ===== */
+async function loadLive(){
+  const box=document.getElementById("liveBox");
+  box.innerHTML="<div class='center'>Loading...</div>";
+  const r=await fetch(`${DB}/eventsday.php?s=Soccer`);
+  const j=await r.json();
+  box.innerHTML=j.events?j.events.map(e=>`
+    <div class="card">
+      <div class="league">${e.strLeague}</div>
+      <div class="match">
+        <div class="team">${e.strHomeTeam}</div>
+        <div class="vs">VS</div>
+        <div class="team" style="text-align:right">${e.strAwayTeam}</div>
+      </div>
+      <div class="time">${mmt(e.dateEvent,e.strTime)}</div>
+    </div>`).join(""):"<div class='center'>No matches</div>";
+}
+
+/* ===== FIXTURES ===== */
+async function loadFixtures(){
+  const box=document.getElementById("fixtureBox");
+  box.innerHTML="<div class='center'>Loading...</div>";
+  const r=await fetch(`${DB}/eventsnext.php?id=133602`);
+  const j=await r.json();
+  box.innerHTML=j.events?j.events.map(e=>`
+    <div class="card">
+      <div class="league">${e.strLeague}</div>
+      <div class="match">
+        <div class="team">${e.strHomeTeam}</div>
+        <div class="vs">VS</div>
+        <div class="team" style="text-align:right">${e.strAwayTeam}</div>
+      </div>
+      <div class="time">${mmt(e.dateEvent,e.strTime)}</div>
+    </div>`).join(""):"<div class='center'>No fixtures</div>";
+}
+
+/* ===== HIGHLIGHTS (FINAL) ===== */
 async function loadHighlights(){
-  const box = document.getElementById("highlightBox");
-  box.innerHTML = "<div class='center'>Loading highlights...</div>";
+  const box=document.getElementById("highlightBox");
+  box.innerHTML="<div class='center'>Loading highlights...</div>";
 
   try{
-    const r = await fetch(SCOREBAT);
-    const j = await r.json();
+    const r=await fetch(SCOREBAT);
+    const j=await r.json();
 
-    /* ===== MMT TIME ===== */
-    const nowMMT = new Date(Date.now() + 6.5*60*60*1000);
-    const today = nowMMT.toISOString().split("T")[0];
-    const y = new Date(nowMMT);
-    y.setDate(y.getDate() - 1);
-    const yesterday = y.toISOString().split("T")[0];
+    const nowMMT=new Date(Date.now()+6.5*60*60*1000);
+    const today=nowMMT.toISOString().split("T")[0];
+    const y=new Date(nowMMT);y.setDate(y.getDate()-1);
+    const yesterday=y.toISOString().split("T")[0];
 
-    const data = j.response.filter(v => {
-      const d = v.date.substring(0,10);
-      const title = v.title.toLowerCase();
-
-      /* FULL MATCH ONLY */
-      const isFullMatch =
-        title.includes("full") ||
-        title.includes("extended");
-
-      return isFullMatch && (d === today || d === yesterday);
+    const list=j.response.filter(v=>{
+      const d=v.date.substring(0,10);
+      const t=v.title.toLowerCase();
+      return (d===today||d===yesterday) &&
+             (t.includes("full")||t.includes("extended"));
     });
 
-    if(!data.length){
-      box.innerHTML="<div class='center'>No full match highlights.</div>";
-      return;
-    }
+    box.innerHTML=list.length?list.map(v=>{
+      const d=v.date.substring(0,10);
+      const badge=d===today
+        ?"<span class='badge today'>TODAY</span>"
+        :"<span class='badge yesterday'>YESTERDAY</span>";
 
-    box.innerHTML = data.map(v=>{
-      const d = v.date.substring(0,10);
-      const label = d === today
-        ? "<span class='badge today'>TODAY</span>"
-        : "<span class='badge yesterday'>YESTERDAY</span>";
-
-      /* Mobile autoplay fix */
-      const embed = v.videos[0].embed
+      const embed=v.videos[0].embed
         .replace("autoplay=1","autoplay=0")
         .replace("<iframe","<iframe loading='lazy'");
 
       return `
       <div class="card">
-        ${label}
+        ${badge}
         <div class="league">${v.competition}</div>
-        <div style="margin-bottom:10px;font-weight:bold;font-size:13px">
+        <div style="font-weight:bold;font-size:13px;margin-bottom:8px">
           ${v.title}
         </div>
-        <div class="video">
-          ${embed}
-        </div>
+        <div class="video">${embed}</div>
       </div>`;
-    }).join("");
+    }).join(""):"<div class='center'>No highlights</div>";
 
-  }catch(e){
-    box.innerHTML="<div class='center'>Highlight service unavailable.</div>";
+  }catch{
+    box.innerHTML="<div class='center'>Error loading highlights</div>";
   }
 }
 
-/* AUTO REFRESH – 10 MIN */
-loadHighlights();
-setInterval(loadHighlights, 600000);
+setInterval(loadHighlights,600000);
+loadLive();
 </script>
 
 </body>
