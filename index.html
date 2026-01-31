@@ -3,100 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <title>GOAL GUIDE</title>
-
 <style>
-/* CSS အပိုင်းကို မူလအတိုင်း ထားရှိပါသည် */
+/* Design အပိုင်းကို သင့်ပုံပါအတိုင်း အနက်ရောင် Theme ထားရှိပါသည် */
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Segoe UI, Arial, sans-serif;
-  background:#0b0f14;
-  color:#fff;
-}
+body{ margin:0; font-family:Segoe UI, sans-serif; background:#0b0f14; color:#fff; }
 header{
-  padding:14px 22px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:2px solid #f5c400;
-  background:#0d121a;
+  padding:14px 22px; display:flex; justify-content:space-between; align-items:center;
+  border-bottom:2px solid #f5c400; background:#0d121a;
 }
 .logo-area { display: flex; align-items: center; gap: 12px; }
-/* LOGO အရွယ်အစားကို ဒီမှာ ညှိနိုင်ပါတယ် */
-.logo-area img { width: 45px; height: 45px; object-fit: contain; border-radius: 5px; }
+/* GitHub က သင့် Logo ပုံကို ဒီမှာ အရွယ်အစား ညှိထားပါတယ် */
+.logo-area img { width: 45px; height: 45px; object-fit: cover; border-radius: 4px; border: 1px solid #333; }
 header h1{margin:0;color:#f5c400; font-size: 22px; font-weight: 800;}
-
-nav button{
-  background:none;border:none;
-  color:#fff;font-weight:600;
-  cursor:pointer;margin-left:12px;
-  opacity:.6; transition: 0.3s;
-}
-nav button.active{opacity:1;color:#f5c400; border-bottom: 2px solid #f5c400; padding-bottom: 5px;}
-
-.controls{
-  padding:14px 22px;
-  display:flex;gap:10px;flex-wrap:wrap; background: #111823;
-}
-select,button{
-  background:#1a222f;
-  color:#f5c400;
-  border:1px solid #f5c400;
-  padding:7px 12px;
-  border-radius:6px;
-  cursor:pointer; font-weight: bold;
-}
-
-section{display:none;padding:22px}
-section.active{display:block}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:16px
-}
-.card{
-  background:linear-gradient(145deg,#151c26,#0d121a);
-  padding:18px;
-  border-radius:14px;
-  box-shadow:0 0 0 1px #2d3748;
-}
-.league{font-size:11px;opacity:.7;margin-bottom:10px; color: #f5c400; text-transform: uppercase;}
-
-.match{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  align-items:center;gap:8px
-}
-.team{ font-size: 14px; font-weight: 600; }
-.vs{color:#f5c400;font-weight:900; font-size: 12px;}
-
-.time{
-  margin-top:12px;
-  font-size:12px;
-  color:#f5c400;
-  background:rgba(245, 196, 0, 0.1);
-  padding:6px 10px;
-  border-radius:6px;
-  display:inline-block;
-  width: 100%; text-align: center;
-}
-
-.center{ text-align:center; opacity:.6; padding:40px 0; grid-column: 1/-1; }
-
-.video{
-  position:relative;
-  padding-bottom:56.25%;
-  height:0;
-  margin-top:12px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-.video iframe{
-  position:absolute; width:100%; height:100%; left:0; top:0; border:0;
-}
-
-footer{ text-align:center; padding:20px; font-size:13px; opacity:.5; }
+nav button{ background:none; border:none; color:#fff; font-weight:600; cursor:pointer; margin-left:12px; opacity:.6; }
+nav button.active{ opacity:1; color:#f5c400; border-bottom: 2px solid #f5c400; padding-bottom: 4px; }
+.controls{ padding:14px 22px; display:flex; gap:10px; flex-wrap:wrap; background: #111823; }
+select, button{ background:#1a222f; color:#f5c400; border:1px solid #f5c400; padding:7px 12px; border-radius:6px; cursor:pointer; font-weight:bold; }
+section{ display:none; padding:22px; }
+section.active{ display:block; }
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+.card{ background:linear-gradient(145deg,#151c26,#0d121a); padding:18px; border-radius:12px; border: 1px solid #2d3748; }
+.league{ font-size:11px; opacity:.7; margin-bottom:10px; color: #f5c400; text-transform: uppercase; }
+.match{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px; }
+.vs{ color:#f5c400; font-weight:900; }
+.time{ margin-top:12px; font-size:12px; color:#f5c400; background:rgba(245,196,0,0.1); padding:6px; border-radius:6px; width:100%; text-align:center; }
+.video{ position:relative; padding-bottom:56.25%; height:0; margin-top:12px; border-radius:8px; overflow:hidden; }
+.video iframe{ position:absolute; width:100%; height:100%; left:0; top:0; border:0; }
+.center{ text-align:center; opacity:.6; padding:40px 0; grid-column:1/-1; }
+footer{ text-align:center; padding:20px; font-size:12px; opacity:.4; }
 </style>
 </head>
 
@@ -104,7 +38,7 @@ footer{ text-align:center; padding:20px; font-size:13px; opacity:.5; }
 
 <header>
   <div class="logo-area">
-    <img src="https://via.placeholder.com/45" id="myLogo" alt="Logo">
+    <img src="IMG_20260123_104505_958.jpg" alt="Logo">
     <h1>GOAL GUIDE</h1>
   </div>
   <nav>
@@ -115,30 +49,25 @@ footer{ text-align:center; padding:20px; font-size:13px; opacity:.5; }
 </header>
 
 <div class="controls">
-  <select id="league" onchange="loadFixtures()">
+  <select id="league" onchange="refreshCurrent()">
     <option value="4328">Premier League</option>
     <option value="4335">La Liga</option>
     <option value="4331">Bundesliga</option>
     <option value="4332">Serie A</option>
     <option value="4334">Ligue 1</option>
-    <option value="4396">English League One</option>
   </select>
-  <button onclick="refreshCurrentPage()">REFRESH</button>
+  <button onclick="refreshCurrent()">REFRESH</button>
 </div>
 
 <section id="live" class="active"><div id="liveBox" class="grid"></div></section>
 <section id="fixtures"><div id="fixtureBox" class="grid"></div></section>
 <section id="highlights"><div id="highlightBox" class="grid"></div></section>
 
-<footer>Goal Guide · MMT · 2026</footer>
+<footer>Goal Guide · Myanmar Time (MMT) · 2026</footer>
 
 <script>
-// မပြောင်းလဲသော API Sources
 const DB="https://www.thesportsdb.com/api/v1/json/3";
 const SCOREBAT="https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
-
-// --- သင့် Logo Link ကို ဒီမှာ အလွယ်တကူ ပြောင်းပါ ---
-document.getElementById('myLogo').src = "သင့်_Logo_Link_ကို_ဒီမှာထည့်ပါ"; 
 
 function showPage(id,btn){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
@@ -150,11 +79,11 @@ function showPage(id,btn){
   if(id==="live") loadLive();
 }
 
-function refreshCurrentPage() {
-    const activeSection = document.querySelector('section.active').id;
-    if(activeSection === 'fixtures') loadFixtures();
-    if(activeSection === 'live') loadLive();
-    if(activeSection === 'highlights') loadHighlights();
+function refreshCurrent() {
+    const active = document.querySelector('section.active').id;
+    if(active === 'fixtures') loadFixtures();
+    else if(active === 'live') loadLive();
+    else loadHighlights();
 }
 
 function mmt(d,t){
@@ -205,11 +134,12 @@ async function loadLive(){
 
 async function loadHighlights(){
   const box=document.getElementById("highlightBox");
-  box.innerHTML="<div class='center'>Searching for Today & Yesterday highlights...</div>";
+  box.innerHTML="<div class='center'>Finding Today & Yesterday highlights...</div>";
   try {
     const r=await fetch(SCOREBAT);
     const j=await r.json();
     
+    // ဒီနေ့နဲ့ မနေ့ကကို ရှာတဲ့ Logic
     const today = new Date().toISOString().split('T')[0];
     const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
 
@@ -220,11 +150,11 @@ async function loadHighlights(){
         <div class="league">${v.competition}</div>
         <div style="margin-bottom:10px; font-weight:bold; font-size:13px;">${v.title}</div>
         <div class="video">${v.videos[0].embed}</div>
-      </div>`).join('') : "<div class='center'>No recent highlights found.</div>";
+      </div>`).join('') : "<div class='center'>No highlights found for today or yesterday.</div>";
   } catch(e) { box.innerHTML="<div class='center'>Error loading highlights.</div>"; }
 }
 
-loadLive(); // Initial Load
+loadLive();
 </script>
 
 </body>
