@@ -125,12 +125,8 @@ footer{text-align:center;padding:25px;font-size:12px;opacity:.5}
 
 <script>
 const DB="https://www.thesportsdb.com/api/v1/json/3";
-const SCOREBAT_URL="https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
 
-function fetchScoreBat(){
-  return fetch("https://api.allorigins.win/raw?url="+encodeURIComponent(SCOREBAT_URL));
-}
-
+/* NAV */
 function showPage(id,btn){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
@@ -151,6 +147,7 @@ function refreshCurrent(){
   else if(a==="fixtures")loadFixtures();
 }
 
+/* TIME */
 function mmt(d,t){
   if(!d||!t)return"TBA";
   const x=new Date(d+"T"+t+"Z");
@@ -158,6 +155,7 @@ function mmt(d,t){
   return x.toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})+" MMT";
 }
 
+/* FIXTURES */
 async function loadFixtures(){
   const league=document.getElementById("league").value;
   const box=document.getElementById("fixtureBox");
@@ -175,6 +173,7 @@ async function loadFixtures(){
   </div>`).join(""):"<div class='center'>No data</div>";
 }
 
+/* LIVE */
 async function loadLive(){
   const box=document.getElementById("liveBox");
   box.innerHTML="<div class='center'>Loading...</div>";
@@ -191,12 +190,13 @@ async function loadLive(){
   </div>`).join(""):"<div class='center'>No matches</div>";
 }
 
+/* HIGHLIGHTS — SERVER API */
 async function loadHighlights(){
   const box=document.getElementById("highlightBox");
   box.innerHTML="<div class='center'>Loading...</div>";
 
   try{
-    const j=await fetchScoreBat().then(r=>r.json());
+    const j = await fetch("/api/highlights").then(r=>r.json());
 
     const now=new Date(Date.now()+6.5*60*60*1000);
     const today=now.toISOString().slice(0,10);
@@ -204,6 +204,7 @@ async function loadHighlights(){
     const yesterday=y.toISOString().slice(0,10);
 
     const list=j.response.filter(v=>{
+      if(!v.videos||!v.videos.length) return false;
       const d=v.date.slice(0,10);
       return d===today||d===yesterday;
     });
@@ -213,16 +214,20 @@ async function loadHighlights(){
       const badge=d===today
         ?"<span class='badge today'>TODAY</span>"
         :"<span class='badge yesterday'>YESTERDAY</span>";
+
       return`
       <div class="card">
         ${badge}
         <div class="league">${v.competition}</div>
         <div style="font-size:13px;font-weight:bold">${v.title}</div>
-        <div class="video">${v.videos[0].embed.replace("autoplay=1","autoplay=0")}</div>
+        <div class="video">
+          ${v.videos[0].embed.replace("autoplay=1","autoplay=0")}
+        </div>
       </div>`;
     }).join(""):"<div class='center'>No highlights</div>";
 
-  }catch{
+  }catch(e){
+    console.error(e);
     box.innerHTML="<div class='center'>Highlight service unavailable</div>";
   }
 }
