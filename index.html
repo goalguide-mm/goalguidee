@@ -6,6 +6,8 @@
 <title>GOAL GUIDE</title>
 
 <link rel="icon" href="IMG_20260123_104505_958.jpg">
+
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
@@ -13,8 +15,8 @@ body{
   margin:0;
   padding:16px;
   background:#0b0e14;
-  color:#f1f1f1;
-  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  color:#f2f2f2;
+  font-family:'Inter','Noto Sans Myanmar','Myanmar Text',sans-serif;
   line-height:1.6;
 }
 
@@ -33,8 +35,8 @@ body{
 }
 
 .logo img{
-  width:54px;
-  height:54px;
+  width:52px;
+  height:52px;
   border-radius:50%;
   border:2px solid #D4AF37;
 }
@@ -43,12 +45,10 @@ body{
   font-family:'Orbitron',sans-serif;
   font-size:26px;
   font-weight:900;
-  letter-spacing:1px;
   color:#D4AF37;
 }
 
-select,button{
-  font-family:'Inter',sans-serif;
+button,select{
   background:#111;
   border:1px solid #D4AF37;
   color:#D4AF37;
@@ -79,47 +79,58 @@ section{margin-top:32px}
   border-radius:16px;
   padding:20px;
   border:1px solid #2a2f3a;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 
 .league{
   font-size:11px;
-  font-weight:600;
-  letter-spacing:.5px;
   color:#9aa3ad;
   text-transform:uppercase;
-  margin-bottom:8px;
+  margin-bottom:6px;
 }
 
 .teams{
   display:flex;
   justify-content:space-between;
-  align-items:center;
   font-size:16px;
   font-weight:700;
 }
 
-.vs{
-  color:#D4AF37;
-  font-size:13px;
-  font-weight:800;
-}
+.vs{color:#D4AF37}
 
 .time{
-  margin-top:12px;
-  display:inline-block;
+  margin-top:10px;
   font-size:12px;
-  font-weight:600;
   color:#D4AF37;
   background:#1c2330;
-  padding:5px 10px;
+  padding:4px 10px;
   border-radius:6px;
+  display:inline-block;
 }
 
-.loading{
+.center{
   text-align:center;
   color:#8a9099;
-  font-weight:500;
+}
+
+/* Highlight */
+.hl-img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+
+.watch{
+  display:block;
+  margin-top:10px;
+  text-align:center;
+  padding:8px;
+  border:1px solid #D4AF37;
+  border-radius:8px;
+  color:#D4AF37;
+  text-decoration:none;
+  font-weight:600;
 }
 </style>
 </head>
@@ -134,45 +145,50 @@ section{margin-top:32px}
   <div>
     <select id="league">
       <option value="4328">Premier League</option>
-      <option value="4329">Championship</option>
-      <option value="4396">League One</option>
+      <option value="4331">La Liga</option>
+      <option value="4332">Serie A</option>
+      <option value="4334">Ligue 1</option>
     </select>
     <button onclick="loadAll()">REFRESH</button>
   </div>
 </div>
 
+<!-- Live -->
 <section>
   <div class="title">Live Matches</div>
-  <div class="loading">ယခုအချိန် Live ပွဲမရှိသေးပါ</div>
+  <div class="center">Live score ကို Demo version အဖြစ် Refresh နဲ့သာပြပါသည်</div>
 </section>
 
+<!-- Fixtures -->
 <section>
   <div class="title">Upcoming Fixtures</div>
   <div id="fixtures" class="grid"></div>
 </section>
 
+<!-- Highlights -->
 <section>
   <div class="title">Match Highlights</div>
-  <div class="loading">Highlights ကို Free version မှာ မရနိုင်သေးပါ</div>
+  <div id="highlights" class="grid"></div>
 </section>
 
 <script>
-const API="https://www.thesportsdb.com/api/v1/json/3/"
+const SPORT_API = "https://www.thesportsdb.com/api/v1/json/3/";
+const SCOREBAT = "https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
 
 function leagueId(){
-  return document.getElementById("league").value
+  return document.getElementById("league").value;
 }
 
 async function loadFixtures(){
-  const box=document.getElementById("fixtures")
-  box.innerHTML="<div class='loading'>Loading...</div>"
+  const box=document.getElementById("fixtures");
+  box.innerHTML="<div class='center'>Loading fixtures...</div>";
 
   try{
-    const r=await fetch(API+"eventsnextleague.php?id="+leagueId())
-    const d=await r.json()
-    box.innerHTML=""
+    const r=await fetch(SPORT_API+"eventsnextleague.php?id="+leagueId());
+    const d=await r.json();
+    box.innerHTML="";
 
-    d.events.slice(0,6).forEach(e=>{
+    d.events.forEach(e=>{
       box.innerHTML+=`
       <div class="card">
         <div class="league">${e.strLeague}</div>
@@ -182,15 +198,41 @@ async function loadFixtures(){
           <span>${e.strAwayTeam}</span>
         </div>
         <div class="time">${e.dateEvent} · ${e.strTime||""}</div>
-      </div>`
-    })
+      </div>`;
+    });
   }catch{
-    box.innerHTML="<div class='loading'>Fixtures error</div>"
+    box.innerHTML="<div class='center'>Fixtures မရနိုင်ပါ</div>";
   }
 }
 
-function loadAll(){loadFixtures()}
-loadAll()
+async function loadHighlights(){
+  const box=document.getElementById("highlights");
+  box.innerHTML="<div class='center'>Loading highlights...</div>";
+
+  try{
+    const r=await fetch(SCOREBAT);
+    const d=await r.json();
+    box.innerHTML="";
+
+    d.response.slice(0,8).forEach(v=>{
+      box.innerHTML+=`
+      <div class="card">
+        <img src="${v.thumbnail}" class="hl-img">
+        <div style="font-weight:600">${v.title}</div>
+        <a href="${v.matchviewUrl}" target="_blank" class="watch">Watch Video</a>
+      </div>`;
+    });
+  }catch{
+    box.innerHTML="<div class='center'>Highlights မရနိုင်ပါ</div>";
+  }
+}
+
+function loadAll(){
+  loadFixtures();
+  loadHighlights();
+}
+
+loadAll();
 </script>
 
 </body>
