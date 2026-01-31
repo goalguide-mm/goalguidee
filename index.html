@@ -192,47 +192,50 @@ async function loadLive(){
 
 /* HIGHLIGHTS — SERVER API */
 async function loadHighlights(){
-  const box=document.getElementById("highlightBox");
+  const box = document.getElementById("highlightBox");
   box.innerHTML="<div class='center'>Loading...</div>";
 
   try{
-    const j = await fetch("/api/highlights").then(r=>r.json());
+    const data = await fetch("/api/highlights").then(r=>r.json());
 
-    const now=new Date(Date.now()+6.5*60*60*1000);
-    const today=now.toISOString().slice(0,10);
-    const y=new Date(now);y.setDate(y.getDate()-1);
-    const yesterday=y.toISOString().slice(0,10);
-
-    const list=j.response.filter(v=>{
-      if(!v.videos||!v.videos.length) return false;
-      const d=v.date.slice(0,10);
-      return d===today||d===yesterday;
+    // 🔥 only finished football matches
+    const matches = (data.highlights || []).filter(m=>{
+      return (
+        m.status === "FT" ||
+        m.status === "Finished" ||
+        m.status === "Full Time"
+      );
     });
 
-    box.innerHTML=list.length?list.map(v=>{
-      const d=v.date.slice(0,10);
-      const badge=d===today
-        ?"<span class='badge today'>TODAY</span>"
-        :"<span class='badge yesterday'>YESTERDAY</span>";
+    if(!matches.length){
+      box.innerHTML="<div class='center'>No finished matches yet</div>";
+      return;
+    }
 
-      return`
-      <div class="card">
-        ${badge}
-        <div class="league">${v.competition}</div>
-        <div style="font-size:13px;font-weight:bold">${v.title}</div>
-        <div class="video">
-          ${v.videos[0].embed.replace("autoplay=1","autoplay=0")}
+    box.innerHTML = matches.map(m=>{
+      const query = `${m.title} ${m.competition} football highlights`;
+
+      return `
+        <div class="card">
+          <span class="badge today">FINISHED</span>
+          <div class="league">${m.competition}</div>
+          <div style="font-weight:bold">${m.title}</div>
+
+          <div class="video">
+            <iframe
+              src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(query)}"
+              allowfullscreen>
+            </iframe>
+          </div>
         </div>
-      </div>`;
-    }).join(""):"<div class='center'>No highlights</div>";
+      `;
+    }).join("");
 
   }catch(e){
     console.error(e);
     box.innerHTML="<div class='center'>Highlight service unavailable</div>";
   }
 }
-
-loadLive();
 </script>
 
 </body>
