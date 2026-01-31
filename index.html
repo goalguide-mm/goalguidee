@@ -5,6 +5,7 @@
 <title>GOAL GUIDE</title>
 
 <style>
+/* Design အပိုင်းကို မူလအတိုင်း ထားရှိပါသည် */
 *{box-sizing:border-box}
 body{
   margin:0;
@@ -87,7 +88,6 @@ section.active{display:block}
   padding:40px 0
 }
 
-/* video */
 .video{
   position:relative;
   padding-bottom:56.25%;
@@ -121,37 +121,39 @@ footer{
 </header>
 
 <div class="controls">
-  <select id="league">
-    <option value="4328">Premier League</option>
-    <option value="4335">La Liga</option>
+  <select id="league" onchange="loadFixtures()">
+    <option value="4328">Premier League (England)</option>
+    <option value="4335">La Liga (Spain)</option>
+    <option value="4331">Bundesliga (Germany)</option>
+    <option value="4332">Serie A (Italy)</option>
+    <option value="4334">Ligue 1 (France)</option>
+    <option value="4337">Eredivisie (Netherlands)</option>
+    <option value="4344">Primeira Liga (Portugal)</option>
+    <option value="4356">Australian A-League</option>
+    <option value="4351">Brazilian Serie A</option>
+    <option value="4422">MLS (USA)</option>
+    <option value="4339">Turkish Super Lig</option>
     <option value="4396">English League One</option>
-  </select>
-
-  <select id="day">
-    <option value="today">Today</option>
-    <option value="tomorrow">Tomorrow</option>
+    <option value="4346">American Major League Soccer</option>
   </select>
 
   <button onclick="loadFixtures()">REFRESH</button>
 </div>
 
-<!-- LIVE -->
 <section id="live" class="active">
   <div class="center">
-    🔴 Live minute-by-minute score မရနိုင်ပါ (Free API limit)<br>
-    ဒီနေ့ ကစားမယ့် Live matches schedule ကိုပြထားပါတယ်
+    🔴 Today's Football Schedule<br>
+    ဒီနေ့ကစားမယ့် တစ်ကမ္ဘာလုံးက ပွဲစဉ်များကို ပြသထားပါသည်
   </div>
   <div id="liveBox" class="grid"></div>
 </section>
 
-<!-- FIXTURES -->
 <section id="fixtures">
   <div id="fixtureBox" class="grid">
     <div class="center">Loading...</div>
   </div>
 </section>
 
-<!-- HIGHLIGHTS -->
 <section id="highlights">
   <div id="highlightBox" class="grid">
     <div class="center">Loading highlights...</div>
@@ -159,22 +161,22 @@ footer{
 </section>
 
 <footer>
-  Demo Version · Myanmar Time (MMT)
+  Demo Version · Myanmar Time (MMT) · 2026
 </footer>
 
 <script>
 const DB="https://www.thesportsdb.com/api/v1/json/3";
-const SCOREBAT="https://www.scorebat.com/video-api/v3/";
+const SCOREBAT="https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
 
 function showPage(id,btn){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
   document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-  btn.classList.add("active");
+  btn.classList.add('active');
   if(id==="highlights") loadHighlights();
+  if(id==="live") loadLive();
 }
 
-/* UTC → Myanmar Time */
 function mmt(d,t){
   if(!d||!t) return "TBA";
   const x=new Date(d+"T"+t+"Z");
@@ -182,7 +184,6 @@ function mmt(d,t){
   return x.toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})+" MMT";
 }
 
-/* LOAD FIXTURES */
 async function loadFixtures(){
   const league=document.getElementById("league").value;
   const box=document.getElementById("fixtureBox");
@@ -193,77 +194,86 @@ async function loadFixtures(){
     const j=await r.json();
 
     box.innerHTML="";
-    if(!j.events){box.innerHTML="<div class='center'>No fixtures</div>";return;}
+    if(!j.events){box.innerHTML="<div class='center'>No fixtures found for this league</div>";return;}
 
-    j.events.slice(0,15).forEach(e=>{
+    j.events.forEach(e=>{
       box.innerHTML+=`
       <div class="card">
         <div class="league">${e.strLeague}</div>
         <div class="match">
-          <div class="team">
-            <img src="${e.strHomeTeamBadge||''}">
-            ${e.strHomeTeam}
-          </div>
+          <div class="team">${e.strHomeTeam}</div>
           <div class="vs">VS</div>
-          <div class="team" style="justify-content:flex-end">
-            ${e.strAwayTeam}
-            <img src="${e.strAwayTeamBadge||''}">
-          </div>
+          <div class="team" style="justify-content:flex-end">${e.strAwayTeam}</div>
         </div>
         <div class="time">${mmt(e.dateEvent,e.strTime)}</div>
       </div>`;
     });
-
   }catch{
     box.innerHTML="<div class='center'>Error loading fixtures</div>";
   }
 }
 
-/* LIVE = TODAY FIXTURES */
 async function loadLive(){
   const box=document.getElementById("liveBox");
-  box.innerHTML="<div class='center'>Loading...</div>";
+  box.innerHTML="<div class='center'>Loading today's matches...</div>";
 
-  const today=new Date().toISOString().slice(0,10);
-  const r=await fetch(`${DB}/eventsday.php?d=${today}&s=Soccer`);
-  const j=await r.json();
+  try {
+    // တစ်ကမ္ဘာလုံးက ဒီနေ့ပွဲစဉ်အားလုံး (Soccer) ကို ဆွဲထုတ်ခြင်း
+    const r=await fetch(`${DB}/eventsday.php?s=Soccer`);
+    const j=await r.json();
 
-  box.innerHTML="";
-  if(!j.events){box.innerHTML="<div class='center'>No live matches today</div>";return;}
+    box.innerHTML="";
+    if(!j.events){box.innerHTML="<div class='center'>No matches scheduled for today</div>";return;}
 
-  j.events.slice(0,12).forEach(e=>{
-    box.innerHTML+=`
-    <div class="card">
-      <div class="league">${e.strLeague}</div>
-      <div class="match">
-        <div class="team">${e.strHomeTeam}</div>
-        <div class="vs">VS</div>
-        <div class="team" style="justify-content:flex-end">${e.strAwayTeam}</div>
-      </div>
-      <div class="time">${mmt(e.dateEvent,e.strTime)}</div>
-    </div>`;
-  });
+    j.events.forEach(e=>{
+      box.innerHTML+=`
+      <div class="card">
+        <div class="league">${e.strLeague}</div>
+        <div class="match">
+          <div class="team">${e.strHomeTeam}</div>
+          <div class="vs">VS</div>
+          <div class="team" style="justify-content:flex-end">${e.strAwayTeam}</div>
+        </div>
+        <div class="time">${mmt(e.dateEvent,e.strTime)}</div>
+      </div>`;
+    });
+  } catch(e) {
+    box.innerHTML="<div class='center'>API Limit ပြည့်သွားပါပြီ။ ခဏနေမှ ပြန်စမ်းပါ။</div>";
+  }
 }
 
-/* HIGHLIGHTS */
 async function loadHighlights(){
   const box=document.getElementById("highlightBox");
-  box.innerHTML="<div class='center'>Loading...</div>";
+  box.innerHTML="<div class='center'>Loading highlights for Jan 31, 2026...</div>";
 
-  const r=await fetch(SCOREBAT);
-  const j=await r.json();
+  try {
+    const r=await fetch(SCOREBAT);
+    const j=await r.json();
 
-  box.innerHTML="";
-  j.response.slice(0,8).forEach(v=>{
-    box.innerHTML+=`
-    <div class="card">
-      <div class="league">${v.competition}</div>
-      <b>${v.title}</b>
-      <div class="video">${v.videos[0].embed}</div>
-    </div>`;
-  });
+    box.innerHTML="";
+    // 2026-01-31 နဲ့ ကိုက်ညီတဲ့ ဗီဒီယိုတွေကို စစ်ထုတ်ခြင်း
+    const targetDate = "2026-01-31";
+    const filtered = j.response.filter(v => v.date.startsWith(targetDate));
+
+    if(filtered.length === 0){
+      box.innerHTML = `<div class='center'>No highlights found for ${targetDate}</div>`;
+      return;
+    }
+
+    filtered.forEach(v=>{
+      box.innerHTML+=`
+      <div class="card">
+        <div class="league">${v.competition}</div>
+        <div style="margin-bottom:8px"><b>${v.title}</b></div>
+        <div class="video">${v.videos[0].embed}</div>
+      </div>`;
+    });
+  } catch(e) {
+    box.innerHTML="<div class='center'>Error loading highlights</div>";
+  }
 }
 
+// Initial calls
 loadFixtures();
 loadLive();
 </script>
