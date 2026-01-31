@@ -5,14 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GOAL GUIDE - Live & Highlights</title>
     
-    <link rel="icon" type="image/png" href="IMG_20260123_104505.png?v=4">
-    <link rel="shortcut icon" href="IMG_20260123_104505.png?v=4">
+    <link rel="icon" type="image/png" href="image_1192e5.png">
+    <link rel="shortcut icon" href="image_1192e5.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { background-color: #0b0e14; color: white; font-family: 'Kanit', sans-serif; margin: 0; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; padding-bottom: 15px; margin-bottom: 30px; }
+        
+        /* Header ပိုင်းတွင် Logo နှင့် စာသားကို ယှဉ်တွဲရန် ပြင်ဆင်ထားသည် */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 3px solid #D4AF37; 
+            padding-bottom: 15px; 
+            margin-bottom: 30px; 
+        }
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
         .logo-text { color: #D4AF37; font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: 3px; }
+        
         .section-title { color: #D4AF37; font-size: 20px; font-weight: 800; margin: 20px 0; border-left: 5px solid #D4AF37; padding-left: 15px; text-transform: uppercase; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px; }
         .card { background: linear-gradient(145deg, #1a1d23, #111419); padding: 20px; border-radius: 15px; border: 1px solid #333; transition: 0.4s; text-align: center; }
@@ -24,7 +36,10 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo-text">GOAL GUIDE</div>
+        <div class="logo-container">
+            <img src="image_1192e5.png" alt="Logo" class="logo-img">
+            <div class="logo-text">GOAL GUIDE</div>
+        </div>
         <button onclick="location.reload()" style="background:#333; color:white; border:1px solid #D4AF37; padding:8px 15px; border-radius:5px; cursor:pointer;">REFRESH</button>
     </div>
 
@@ -37,6 +52,7 @@
     <div id="highlight-list" class="grid">
         <div class="loading">Highlights ဗီဒီယိုများ ရှာဖွေနေသည်...</div>
     </div>
+
     <script>
         // ၁။ Live ပွဲစဉ်များအတွက် ခေါ်ယူခြင်း
         async function getLiveMatches() {
@@ -65,7 +81,7 @@
             }
         }
 
-        // ၂။ Highlights များအတွက် ခေါ်ယူခြင်း (Token မလိုသော Version)
+        // ၂။ Highlights များအတွက် ခေါ်ယူခြင်း
         async function getHighlights() {
             try {
                 const response = await fetch('https://www.scorebat.com/video-api/v1/');
@@ -73,7 +89,6 @@
                 const container = document.getElementById('highlight-list');
                 container.innerHTML = "";
                 
-                // ဗီဒီယို ၁၂ ခုကို ပြပေးပါမည်
                 data.slice(0, 12).forEach(vid => {
                     container.innerHTML += `
                         <div class="card highlight-card">
