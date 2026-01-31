@@ -196,34 +196,32 @@ async function loadHighlights(){
   box.innerHTML="<div class='center'>Loading...</div>";
 
   try{
-    const data = await fetch("/api/highlights").then(r=>r.json());
+    const j = await fetch("/api/highlights").then(r=>r.json());
+    const list = j.highlights || [];
 
-    // 🔥 only finished football matches
-    const matches = (data.highlights || []).filter(m=>{
-      return (
-        m.status === "FT" ||
-        m.status === "Finished" ||
-        m.status === "Full Time"
-      );
-    });
-
-    if(!matches.length){
-      box.innerHTML="<div class='center'>No finished matches yet</div>";
+    if(!list.length){
+      box.innerHTML="<div class='center'>No highlights</div>";
       return;
     }
 
-    box.innerHTML = matches.map(m=>{
-      const query = `${m.title} ${m.competition} football highlights`;
+    box.innerHTML = list.map(v=>{
+      // YouTube watch → embed
+      const embed = v.video.replace(
+        "watch?v=",
+        "embed/"
+      );
 
       return `
         <div class="card">
-          <span class="badge today">FINISHED</span>
-          <div class="league">${m.competition}</div>
-          <div style="font-weight:bold">${m.title}</div>
+          <span class="badge today">HIGHLIGHT</span>
+          <div class="league">${v.competition}</div>
+          <div style="font-size:13px;font-weight:bold">
+            ${v.title}
+          </div>
 
           <div class="video">
             <iframe
-              src="https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(query)}"
+              src="${embed}"
               allowfullscreen>
             </iframe>
           </div>
