@@ -2,34 +2,28 @@
 <html lang="my">
 <head>
     <meta charset="UTF-8">
-    <title>GOAL GUIDE - Custom Design</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOAL GUIDE - Fixed Version</title>
     <style>
-        /* သင့် Original Design ကို အခြေခံထားပါသည် */
         *{box-sizing:border-box}
         body{ margin:0; font-family:'Segoe UI', sans-serif; background:#0b0f14; color:#fff; }
         header{ padding:15px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #f5c400; background: #0d121a; }
         header h1{margin:0; color:#f5c400; font-size: 24px;}
         nav button{ background:none; border:none; color:#fff; font-weight:600; cursor:pointer; margin-left:15px; opacity:.6; }
         nav button.active{ opacity:1; color:#f5c400; border-bottom: 2px solid #f5c400; }
-        .controls{ padding:15px 20px; display:flex; gap:10px; background: #111823; flex-wrap: wrap; }
-        select, button.refresh-btn{ background:#1a222f; color:#f5c400; border:1px solid #f5c400; padding:8px 15px; border-radius:6px; cursor:pointer; font-weight:bold; }
         
-        section{ display:none; padding:20px; }
+        section{ display:none; padding:20px; min-height: 80vh; }
         section.active{ display:block; }
         
-        .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:15px; }
+        /* Card & UI Design */
+        .status-bar { background: #1a222f; padding: 10px 20px; font-size: 13px; color: #f5c400; border-bottom: 1px solid #2d3748; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+        .card { background: #151c26; border-radius: 12px; border: 1px solid #2d3748; overflow: hidden; }
+        .card-header { padding: 10px; background: #1d2736; font-size: 12px; font-weight: bold; color: #f5c400; border-bottom: 1px solid #2d3748; }
         
-        /* Card Design */
-        .card{ background:linear-gradient(145deg,#151c26,#0d121a); padding:18px; border-radius:12px; border:1px solid #2d3748; transition: 0.3s; }
-        .league-name { font-size: 11px; color: #f5c400; margin-bottom: 10px; opacity: 0.8; }
-        .match-row{ display:flex; justify-content:space-between; align-items:center; }
-        .team { flex: 1; text-align: center; }
-        .team-name { font-size: 14px; font-weight: bold; margin-top: 5px; }
-        .vs { color:#f5c400; font-weight:900; padding: 0 10px; }
-        .match-info { margin-top: 15px; font-size: 12px; color: #888; text-align: center; border-top: 1px solid #1f2937; padding-top: 10px; }
-        
-        .video-box { margin-top: 10px; border-radius: 8px; overflow: hidden; }
-        .loading { text-align: center; padding: 50px; color: #888; grid-column: 1/-1; }
+        /* Error ကင်းတဲ့ Widget Frame */
+        iframe { width: 100%; border: none; background: transparent; }
+        .loading-msg { text-align: center; padding: 50px; color: #888; }
     </style>
 </head>
 <body>
@@ -37,94 +31,51 @@
 <header>
     <h1>GOAL GUIDE</h1>
     <nav>
-        <button class="active" onclick="changeTab('live', this)">LIVE</button>
-        <button onclick="changeTab('fixtures', this)">FIXTURES</button>
-        <button onclick="changeTab('highlights', this)">HIGHLIGHTS</button>
+        <button class="active" onclick="showTab('live', this)">LIVE & FIXTURES</button>
+        <button onclick="showTab('highlights', this)">HIGHLIGHTS</button>
     </nav>
 </header>
 
-<div class="controls">
-    <select id="leagueSelect" onchange="loadData()">
-        <option value="Premier League">Premier League</option>
-        <option value="La Liga">La Liga</option>
-        <option value="Serie A">Serie A</option>
-        <option value="Bundesliga">Bundesliga</option>
-        <option value="Ligue 1">Ligue 1</option>
-    </select>
-    <button class="refresh-btn" onclick="loadData()">REFRESH</button>
-</div>
+<div class="status-bar">● Real-time Football Updates (No API Key Required)</div>
 
-<section id="live" class="active"><div id="liveBox" class="grid"></div></section>
-<section id="fixtures"><div id="fixtureBox" class="grid"></div></section>
-<section id="highlights"><div id="highlightBox" class="grid"></div></section>
+<section id="live" class="active">
+    <div class="grid">
+        <div class="card" style="grid-column: 1 / -1;">
+            <div class="card-header">LIVE SCORES & MATCH SCHEDULE</div>
+            <iframe src="https://www.scorebat.com/embed/livescore/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==" 
+                    height="600" allowfullscreen allow="autoplay; fullscreen" class="_scorebatEmbeddedPlayer_"></iframe>
+        </div>
+    </div>
+</section>
+
+<section id="highlights">
+    <div class="grid">
+        <div class="card" style="grid-column: 1 / -1;">
+            <div class="card-header">LATEST MATCH HIGHLIGHTS</div>
+            <iframe src="https://www.scorebat.com/embed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==" 
+                    height="600" allowfullscreen allow="autoplay; fullscreen" class="_scorebatEmbeddedPlayer_"></iframe>
+        </div>
+    </div>
+</section>
 
 <script>
-// ScoreBat API is the most stable free source for highlights & matches info
-const API_URL = "https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==";
-
-function changeTab(tabId, btn) {
-    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    btn.classList.add('active');
-    loadData();
-}
-
-async function loadData() {
-    const activeTab = document.querySelector('section.active').id;
-    const box = document.getElementById(activeTab + 'Box');
-    const selectedLeague = document.getElementById('leagueSelect').value;
-    
-    box.innerHTML = '<div class="loading">အချက်အလက်များ ဆွဲယူနေသည်...</div>';
-
-    try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-        
-        // Filter by League
-        const filteredData = data.response.filter(item => 
-            item.competition.toLowerCase().includes(selectedLeague.toLowerCase())
-        );
-
-        box.innerHTML = "";
-        if (filteredData.length === 0) {
-            box.innerHTML = `<div class="loading">${selectedLeague} အတွက် ပွဲစဉ်များ မရှိသေးပါ။</div>`;
-            return;
-        }
-
-        filteredData.forEach(match => {
-            if (activeTab === 'highlights') {
-                // Highlights Card
-                box.innerHTML += `
-                    <div class="card">
-                        <div class="league-name">${match.competition}</div>
-                        <div class="team-name" style="margin-bottom:10px;">${match.title}</div>
-                        <div class="video-box">${match.videos[0].embed}</div>
-                    </div>`;
-            } else {
-                // Live & Fixtures Card (using ScoreBat data)
-                box.innerHTML += `
-                    <div class="card">
-                        <div class="league-name">${match.competition}</div>
-                        <div class="match-row">
-                            <div class="team"><div class="team-name">${match.title.split(' - ')[0]}</div></div>
-                            <div class="vs">VS</div>
-                            <div class="team"><div class="team-name">${match.title.split(' - ')[1]}</div></div>
-                        </div>
-                        <div class="match-info">
-                            နေ့စွဲ - ${new Date(match.date).toLocaleDateString()}
-                        </div>
-                    </div>`;
-            }
-        });
-    } catch (error) {
-        box.innerHTML = '<div class="loading">Error: ဒေတာ ဆွဲယူ၍ မရနိုင်ပါ။</div>';
+    function showTab(tabId, btn) {
+        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
     }
-}
 
-// ပထမဆုံး စတင်ချိန်တွင် Load လုပ်ရန်
-loadData();
+    // Auto-resize script
+    window.addEventListener('message', function(e) {
+        if (typeof e.data !== 'string') return;
+        if (e.data.indexOf('scorebat-stats-update') !== -1) {
+            console.log('Stats Updated');
+        }
+    });
 </script>
+
+<script src="https://www.scorebat.com/embed/embed.js"></script>
 
 </body>
 </html>
