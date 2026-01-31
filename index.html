@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOAL GUIDE - Live & Highlights</title>
+    <title>GOAL GUIDE - Live, Fixtures & Highlights</title>
     
     <link rel="icon" type="image/png" href="image_1192e5.png">
     <link rel="shortcut icon" href="image_1192e5.png">
@@ -13,119 +13,115 @@
         body { background-color: #0b0e14; color: white; font-family: 'Kanit', sans-serif; margin: 0; padding: 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; padding-bottom: 15px; margin-bottom: 30px; }
         .logo-container { display: flex; align-items: center; gap: 15px; }
-        .logo-img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #D4AF37; object-fit: cover; }
+        
+        /* Logo styling */
+        .logo-img { 
+            width: 55px; 
+            height: 55px; 
+            border-radius: 50%; 
+            border: 2px solid #D4AF37; 
+            object-fit: cover; 
+            background-color: #1a1d23; /* ပုံမပေါ်ခင် နောက်ခံအရောင် */
+        }
+        
         .logo-text { color: #D4AF37; font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; letter-spacing: 3px; }
-        
-        .section-title { color: #D4AF37; font-size: 20px; font-weight: 800; margin: 30px 0 15px 0; border-left: 5px solid #D4AF37; padding-left: 15px; text-transform: uppercase; }
-        .league-name { background: #1a1d23; color: #D4AF37; padding: 8px 15px; border-radius: 5px; font-size: 14px; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #333; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .card { background: linear-gradient(145deg, #1a1d23, #111419); padding: 20px; border-radius: 15px; border: 1px solid #333; transition: 0.4s; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .section-title { color: #D4AF37; font-size: 20px; font-weight: 800; margin: 40px 0 15px 0; border-left: 5px solid #D4AF37; padding-left: 15px; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .card { background: linear-gradient(145deg, #1a1d23, #111419); padding: 20px; border-radius: 15px; border: 1px solid #333; transition: 0.4s; text-align: center; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
         .card:hover { border-color: #D4AF37; transform: translateY(-5px); }
-        
-        .highlight-card img { width: 100%; height: 170px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #444; object-fit: cover; }
-        .btn { background: #D4AF37; color: black; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: 800; font-size: 13px; transition: 0.3s; }
-        .btn:hover { background: #fff; }
+        .btn { background: #D4AF37; color: black; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px; font-weight: 800; font-size: 13px; }
+        .live-tag { position: absolute; top: 10px; right: 10px; background: #ff4d4d; color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .loading { color: #888; text-align: center; padding: 40px; grid-column: 1/-1; }
+        .highlight-card img { width: 100%; height: 170px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #444; object-fit: cover; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <div class="logo-container">
-            <img src="image_1192e5.png" alt="Logo" class="logo-img">
+            <img src="image_1192e5.png" 
+                 alt="Logo" 
+                 class="logo-img" 
+                 onerror="this.onerror=null; this.src='https://www.w3schools.com/howto/img_avatar.png';">
             <div class="logo-text">GOAL GUIDE</div>
         </div>
         <button onclick="location.reload()" style="background:#333; color:white; border:1px solid #D4AF37; padding:8px 15px; border-radius:5px; cursor:pointer; font-weight: bold;">REFRESH</button>
     </div>
 
     <div class="section-title">Live Matches (တိုက်ရိုက်ပွဲစဉ်များ)</div>
-    <div id="live-container">
-        <div id="live-list" class="grid">
-            <div class="loading">Live ပွဲစဉ်များ ရှာဖွေနေသည်...</div>
-        </div>
-    </div>
+    <div id="live-list" class="grid"><div class="loading">Loading...</div></div>
 
-    <div class="section-title">Latest Highlights (ပွဲပြီး Highlights ဗီဒီယိုများ)</div>
-    <div id="highlight-list" class="grid">
-        <div class="loading">Highlights များ ရှာဖွေနေသည်...</div>
-    </div>
+    <div class="section-title">Upcoming Fixtures (ပွဲစဉ်ဇယားများ)</div>
+    <div id="fixture-list" class="grid"><div class="loading">Loading...</div></div>
+
+    <div class="section-title">Latest Highlights (ဗီဒီယိုများ)</div>
+    <div id="highlight-list" class="grid"><div class="loading">Loading...</div></div>
 
     <script>
-        const API_KEY = "d37030c761msh9a0fce3d0a1fab3p1819a3jsnb343019b616b";
+        const RAPID_API_KEY = "d37030c761msh9a0fce3d0a1fab3p1819a3jsnb343019b616b";
+        const RAPID_HOST = "allsportsapi2.p.rapidapi.com";
 
-        // ၁။ Live ပွဲစဉ်များကို League အလိုက် စုစည်းပြသခြင်း
-        async function getLiveMatches() {
+        async function fetchLive() {
             try {
-                const response = await fetch('https://allsportsapi2.p.rapidapi.com/api/tv/events/live', {
-                    headers: { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'allsportsapi2.p.rapidapi.com' }
+                const response = await fetch(`https://${RAPID_HOST}/api/tv/events/live`, {
+                    headers: { 'x-rapidapi-key': RAPID_API_KEY, 'x-rapidapi-host': RAPID_HOST }
                 });
                 const data = await response.json();
-                const listContainer = document.getElementById('live-list');
-                listContainer.innerHTML = "";
-
-                if (data.events && data.events.length > 0) {
-                    // လိဂ်အလိုက် Group ဖွဲ့ခြင်း
-                    const groupedMatches = data.events.reduce((acc, match) => {
-                        const leagueName = match.tournament.uniqueName || match.tournament.name;
-                        if (!acc[leagueName]) acc[leagueName] = [];
-                        acc[leagueName].push(match);
-                        return acc;
-                    }, {});
-
-                    // Group လုပ်ထားသော Data များကို HTML ထုတ်ခြင်း
-                    for (const league in groupedMatches) {
-                        const leagueSection = document.createElement('div');
-                        leagueSection.className = 'league-group';
-                        leagueSection.style.gridColumn = "1/-1";
-                        leagueSection.innerHTML = `<div class="league-name">🏆 ${league}</div>`;
-                        listContainer.appendChild(leagueSection);
-
-                        groupedMatches[league].forEach(match => {
-                            listContainer.innerHTML += `
-                                <div class="card">
-                                    <div style="font-weight: 800; font-size: 16px; margin: 10px 0;">
-                                        ${match.homeTeam.name} <span style="color:#D4AF37;">VS</span> ${match.awayTeam.name}
-                                    </div>
-                                    <div style="color: #ff4d4d; font-size: 12px; font-weight: bold; margin-bottom: 10px;">🔴 LIVE NOW</div>
-                                    <a href="https://www.youtube.com/results?search_query=${match.homeTeam.name}+vs+${match.awayTeam.name}+live" target="_blank" class="btn">WATCH LIVE</a>
-                                </div>`;
-                        });
-                    }
-                } else {
-                    listContainer.innerHTML = "<div class='loading'>လက်ရှိ တိုက်ရိုက်ကန်နေသည့် ပွဲစဉ်များ မရှိသေးပါ။</div>";
-                }
-            } catch (e) {
-                listContainer.innerHTML = "<div class='loading'>Live Data ခေါ်ယူ၍ မရနိုင်ပါ။</div>";
-            }
+                renderMatches(data.events, 'live-list', true);
+            } catch (e) { document.getElementById('live-list').innerHTML = "Error loading Live Data."; }
         }
 
-        // ၂။ Highlights များကို အသစ်ဆုံး Version (V3) ဖြင့်ပြသခြင်း
-        async function getHighlights() {
+        async function fetchFixtures() {
+            try {
+                const date = new Date().toISOString().split('T')[0];
+                const response = await fetch(`https://${RAPID_HOST}/api/tv/events/date/${date}`, {
+                    headers: { 'x-rapidapi-key': RAPID_API_KEY, 'x-rapidapi-host': RAPID_HOST }
+                });
+                const data = await response.json();
+                const upcoming = data.events.filter(m => m.status.type === "notstarted");
+                renderMatches(upcoming.slice(0, 12), 'fixture-list', false);
+            } catch (e) { document.getElementById('fixture-list').innerHTML = "Error loading Fixtures."; }
+        }
+
+        function renderMatches(events, containerId, isLive) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+            if (!events || events.length === 0) {
+                container.innerHTML = "<div class='loading'>ပွဲစဉ်များ မရှိသေးပါ။</div>";
+                return;
+            }
+            events.forEach(match => {
+                const time = new Date(match.startTimestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                container.innerHTML += `
+                    <div class="card">
+                        ${isLive ? '<div class="live-tag">LIVE</div>' : ''}
+                        <div style="font-size: 11px; color: #888;">${match.tournament.name}</div>
+                        <div style="font-size: 14px; color: #D4AF37; font-weight: bold;">${isLive ? "ကန်နေဆဲ" : time}</div>
+                        <div style="font-weight: 800; font-size: 16px; margin: 10px 0;">${match.homeTeam.name} VS ${match.awayTeam.name}</div>
+                        <a href="https://www.youtube.com/results?search_query=${match.homeTeam.name}+vs+${match.awayTeam.name}+${isLive ? 'live' : 'preview'}" target="_blank" class="btn">${isLive ? 'WATCH LIVE' : 'INFO'}</a>
+                    </div>`;
+            });
+        }
+
+        async function fetchHighlights() {
             try {
                 const response = await fetch('https://www.scorebat.com/video-api/v3/feed/?token=MTY4OTdfMTcwNjY3Mzk3NF9mMDJiZTU3YmM0MzU0YWRiOTViYmI3ODU0YjE3Y2M1Yg==');
                 const data = await response.json();
                 const container = document.getElementById('highlight-list');
                 container.innerHTML = "";
-                
-                // အသစ်ဆုံး ၁၂ ခုကိုသာ ပြပါမည်
                 data.response.slice(0, 12).forEach(vid => {
                     container.innerHTML += `
                         <div class="card highlight-card">
                             <img src="${vid.thumbnail}" alt="thumb">
                             <div style="font-size: 14px; font-weight: 600; min-height: 40px;">${vid.title}</div>
-                            <div style="font-size: 11px; color: #888; margin-top: 5px;">${vid.competition}</div>
-                            <a href="${vid.matchviewUrl}" target="_blank" class="btn" style="background:#222; color:#D4AF37; border:1px solid #D4AF37;">WATCH HIGHLIGHT</a>
+                            <a href="${vid.matchviewUrl}" target="_blank" class="btn" style="background:#222; color:#D4AF37; border:1px solid #D4AF37;">WATCH</a>
                         </div>`;
                 });
-            } catch (e) {
-                document.getElementById('highlight-list').innerHTML = "<div class='loading'>Highlights များ ခေါ်ယူ၍ မရနိုင်ပါ။</div>";
-            }
+            } catch (e) { document.getElementById('highlight-list').innerHTML = "Error loading Highlights."; }
         }
 
-        // Run Functions
-        getLiveMatches();
-        getHighlights();
+        fetchLive(); fetchFixtures(); fetchHighlights();
     </script>
 </body>
 </html>
