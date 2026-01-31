@@ -6,28 +6,121 @@
 <title>GOAL GUIDE</title>
 
 <link rel="icon" href="IMG_20260123_104505_958.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-body{margin:0;padding:15px;background:#0b0e14;color:#fff;font-family:'Kanit',sans-serif}
-.header{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #D4AF37;padding-bottom:15px}
-.logo{display:flex;align-items:center;gap:15px}
-.logo img{width:55px;height:55px;border-radius:50%;border:2px solid #D4AF37}
-.logo span{font-family:'Orbitron';font-size:26px;font-weight:900;color:#D4AF37}
-button,select{background:#111;border:1px solid #D4AF37;color:#D4AF37;padding:8px 12px;border-radius:6px}
-.section{margin-top:30px}
-.title{color:#D4AF37;font-weight:800;border-left:5px solid #D4AF37;padding-left:12px;margin-bottom:15px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.card{background:#1a1d23;border-radius:15px;padding:20px;border:1px solid #333;text-align:center}
-.card.live{border-top:3px solid red}
-.league{font-size:11px;color:#aaa;text-transform:uppercase}
-.teams{display:flex;justify-content:space-between;font-weight:800;margin:10px 0}
-.vs{color:#D4AF37;font-size:12px}
-.time{font-size:12px;color:#D4AF37;background:#222;padding:4px 8px;border-radius:5px}
-.loading{text-align:center;color:#888;grid-column:1/-1}
-img{width:100%;height:160px;object-fit:cover;border-radius:10px;border:1px solid #444}
-a{display:block;margin-top:10px;padding:10px;border-radius:8px;border:1px solid #D4AF37;color:#D4AF37;text-decoration:none}
-.live-tag{color:red;font-weight:800;font-size:12px}
+body{
+  margin:0;
+  padding:16px;
+  background:#0b0e14;
+  color:#f1f1f1;
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  line-height:1.6;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:3px solid #D4AF37;
+  padding-bottom:14px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.logo img{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  border:2px solid #D4AF37;
+}
+
+.logo span{
+  font-family:'Orbitron',sans-serif;
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:1px;
+  color:#D4AF37;
+}
+
+select,button{
+  font-family:'Inter',sans-serif;
+  background:#111;
+  border:1px solid #D4AF37;
+  color:#D4AF37;
+  padding:8px 14px;
+  border-radius:6px;
+  font-weight:600;
+}
+
+section{margin-top:32px}
+
+.title{
+  font-size:18px;
+  font-weight:800;
+  color:#D4AF37;
+  border-left:5px solid #D4AF37;
+  padding-left:12px;
+  margin-bottom:16px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:linear-gradient(180deg,#151c26,#10151d);
+  border-radius:16px;
+  padding:20px;
+  border:1px solid #2a2f3a;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+.league{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.5px;
+  color:#9aa3ad;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.teams{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:16px;
+  font-weight:700;
+}
+
+.vs{
+  color:#D4AF37;
+  font-size:13px;
+  font-weight:800;
+}
+
+.time{
+  margin-top:12px;
+  display:inline-block;
+  font-size:12px;
+  font-weight:600;
+  color:#D4AF37;
+  background:#1c2330;
+  padding:5px 10px;
+  border-radius:6px;
+}
+
+.loading{
+  text-align:center;
+  color:#8a9099;
+  font-weight:500;
+}
 </style>
 </head>
 
@@ -39,110 +132,65 @@ a{display:block;margin-top:10px;padding:10px;border-radius:8px;border:1px solid 
     <span>GOAL GUIDE</span>
   </div>
   <div>
-    <select id="league" onchange="loadAll()">
+    <select id="league">
       <option value="4328">Premier League</option>
-      <option value="4335">La Liga</option>
-      <option value="4332">Serie A</option>
+      <option value="4329">Championship</option>
+      <option value="4396">League One</option>
     </select>
     <button onclick="loadAll()">REFRESH</button>
   </div>
 </div>
 
-<div class="section">
+<section>
   <div class="title">Live Matches</div>
-  <div id="live" class="grid">
-    <div class="loading">Live matches ရှာဖွေနေသည်...</div>
-  </div>
-</div>
+  <div class="loading">ယခုအချိန် Live ပွဲမရှိသေးပါ</div>
+</section>
 
-<div class="section">
+<section>
   <div class="title">Upcoming Fixtures</div>
-  <div id="fixtures" class="grid">
-    <div class="loading">Fixtures ဆွဲယူနေသည်...</div>
-  </div>
-</div>
+  <div id="fixtures" class="grid"></div>
+</section>
 
-<div class="section">
+<section>
   <div class="title">Match Highlights</div>
-  <div id="highlights" class="grid">
-    <div class="loading">Highlights ဆွဲယူနေသည်...</div>
-  </div>
-</div>
+  <div class="loading">Highlights ကို Free version မှာ မရနိုင်သေးပါ</div>
+</section>
 
 <script>
-function leagueId(){return document.getElementById("league").value}
+const API="https://www.thesportsdb.com/api/v1/json/3/"
 
-// LIVE MATCHES
-async function loadLive(){
-  const box=document.getElementById("live")
-  try{
-    const r=await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnowleague.php?id=${leagueId()}`)
-    const d=await r.json()
-    box.innerHTML=""
-    if(!d.events){box.innerHTML="<div class='loading'>Live မရှိပါ</div>";return}
-    d.events.forEach(m=>{
-      box.innerHTML+=`
-      <div class="card live">
-        <div class="league">${m.strLeague}</div>
-        <div class="teams">
-          <span>${m.strHomeTeam}</span>
-          <span class="vs">VS</span>
-          <span>${m.strAwayTeam}</span>
-        </div>
-        <div class="live-tag">● LIVE</div>
-      </div>`
-    })
-  }catch{box.innerHTML="<div class='loading'>Live error</div>"}
+function leagueId(){
+  return document.getElementById("league").value
 }
 
-// FIXTURES
 async function loadFixtures(){
   const box=document.getElementById("fixtures")
+  box.innerHTML="<div class='loading'>Loading...</div>"
+
   try{
-    const r=await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${leagueId()}`)
+    const r=await fetch(API+"eventsnextleague.php?id="+leagueId())
     const d=await r.json()
     box.innerHTML=""
-    d.events.slice(0,6).forEach(m=>{
+
+    d.events.slice(0,6).forEach(e=>{
       box.innerHTML+=`
       <div class="card">
-        <div class="league">${m.strLeague}</div>
+        <div class="league">${e.strLeague}</div>
         <div class="teams">
-          <span>${m.strHomeTeam}</span>
+          <span>${e.strHomeTeam}</span>
           <span class="vs">VS</span>
-          <span>${m.strAwayTeam}</span>
+          <span>${e.strAwayTeam}</span>
         </div>
-        <div class="time">${m.dateEvent} • ${m.strTime}</div>
+        <div class="time">${e.dateEvent} · ${e.strTime||""}</div>
       </div>`
     })
-  }catch{box.innerHTML="<div class='loading'>Fixtures error</div>"}
+  }catch{
+    box.innerHTML="<div class='loading'>Fixtures error</div>"
+  }
 }
 
-// HIGHLIGHTS
-async function loadHighlights(){
-  const box=document.getElementById("highlights")
-  try{
-    const r=await fetch("https://api.allorigins.win/raw?url=https://www.scorebat.com/video-api/v3/feed/")
-    const d=await r.json()
-    box.innerHTML=""
-    d.response.slice(0,6).forEach(v=>{
-      box.innerHTML+=`
-      <div class="card">
-        <img src="${v.thumbnail}">
-        <div>${v.title}</div>
-        <a href="${v.matchviewUrl}" target="_blank">WATCH</a>
-      </div>`
-    })
-  }catch{box.innerHTML="<div class='loading'>Highlights error</div>"}
-}
-
-function loadAll(){
-  loadLive()
-  loadFixtures()
-  loadHighlights()
-}
-
+function loadAll(){loadFixtures()}
 loadAll()
-setInterval(loadLive,60000)
 </script>
 
 </body>
